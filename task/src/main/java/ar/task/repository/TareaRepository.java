@@ -17,5 +17,5 @@ public interface TareaRepository extends JpaRepository<Tarea, Integer> {
     List<Tarea> findByUsuarioAsignado_IdUsuario(Integer idUsuario);
 
     // 3. Buscar tareas por estado (ej: Pendientes/Completadas) dentro de un equipo
-    List<Tarea> findByEquipoTrabajo_IdEquipoAndEstado(Integer idEquipo, Boolean estado);
+    List<Tarea> findByEquipoTrabajo_IdEquipoAndEstado(Integer idTarea, Boolean estado);
 }
