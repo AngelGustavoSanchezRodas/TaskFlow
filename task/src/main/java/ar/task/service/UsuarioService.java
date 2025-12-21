@@ -7,6 +7,7 @@ import ar.task.entities.Usuario;
 import ar.task.repository.DatosUsuarioRepository;
 import ar.task.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ public class UsuarioService {
 
     @Autowired
     private DatosUsuarioRepository datosUsuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Inyección de la herramienta
 
     // Método principal para registrar
     @Transactional // 3. Si algo falla en medio del proceso, hace "rollback" (deshace todo)
@@ -45,7 +49,8 @@ public class UsuarioService {
         datos.setActivo(true); // Por defecto activo al registrarse
 
         // TODO: MÁS ADELANTE ENCRIPTAREMOS ESTO CON SPRING SECURITY
-        datos.setContrasenia(usuarioDTO.getContrasenia());
+        //datos.setContrasenia(usuarioDTO.getContrasenia());
+        datos.setContrasenia(passwordEncoder.encode(usuarioDTO.getContrasenia())); // ✅ Encriptamos
 
         // Paso 2: Crear y llenar Usuario
         Usuario usuario = new Usuario();
@@ -71,28 +76,30 @@ public class UsuarioService {
         return respuesta;
     }
 
-    // Agrega esto en UsuarioService.java
-public UsuarioSalidaDTO login(String correo, String contrasenia) {
-    // 1. Buscamos al usuario por correo (usando el repositorio de DatosUsuario)
-    // Nota: Necesitarás inyectar DatosUsuarioRepository también si no lo has hecho
-    DatosUsuario datos = datosUsuarioRepository.findByCorreo(correo)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+ public UsuarioSalidaDTO login(String correo, String contrasenia) {
 
-    // 2. Validamos contraseña (¡OJO! Esto es texto plano por ahora)
-    if (!datos.getContrasenia().equals(contrasenia)) {
-        throw new RuntimeException("Contraseña incorrecta");
+        // 1. Buscamos al USUARIO COMPLETO (Padre) usando el correo
+        Usuario usuario = usuarioRepository.findByDatosUsuario_Correo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // 2. Validamos contraseña (sacándola de los datos del usuario)
+        if (!passwordEncoder.matches(contrasenia, usuario.getDatosUsuario().getContrasenia())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        // 3. Llenamos el DTO con TODO (Ahora sí tenemos acceso a ambos lados)
+        UsuarioSalidaDTO dto = new UsuarioSalidaDTO();
+
+        // Datos del Padre
+        dto.setIdUsuario(usuario.getIdUsuario());
+        dto.setUserName(usuario.getUserName());
+
+        // Datos del Hijo
+        dto.setIdDatosUsuario(usuario.getDatosUsuario().getIdDatosUsuario());
+        dto.setNombre(usuario.getDatosUsuario().getNombre());
+        dto.setApellido(usuario.getDatosUsuario().getApellido());
+        dto.setCorreo(usuario.getDatosUsuario().getCorreo());
+
+        return dto;
     }
-
-    // 3. Si todo ok, buscamos el objeto Usuario padre para devolver el DTO
-    // (Asumiendo que puedes buscar el Usuario por el ID de sus datos, o relación inversa)
-    // Para simplificar, aquí podrías necesitar un método en UsuarioRepository
-    // Ejemplo: findByDatosUsuario_Id(Integer id);
-
-    // *Truco temporal*: Por ahora devolvemos un DTO armado con lo que tenemos
-    UsuarioSalidaDTO dto = new UsuarioSalidaDTO();
-    dto.setNombre(datos.getNombre());
-    dto.setCorreo(datos.getCorreo());
-    dto.setIdDatosUsuario(datos.getIdDatosUsuario());
-    return dto;
-}
 }

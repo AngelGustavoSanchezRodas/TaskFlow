@@ -9,6 +9,9 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    // Para buscar si existe un usuario tipo "Agustavo93"
+    // Para buscar si existe un usuario tipo
     Optional<Usuario> findByUserName(String userName);
+
+    // Busca el Usuario padre filtrando por el correo de su hijo (DatosUsuario)
+    Optional<Usuario> findByDatosUsuario_Correo(String correo);
 }
