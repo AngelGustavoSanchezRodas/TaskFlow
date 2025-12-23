@@ -1,7 +1,6 @@
 package ar.task.controller;
 
 import ar.task.dtos.EquipoDTO;
-import ar.task.dtos.UsuarioSalidaDTO;
 import ar.task.service.EquipoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

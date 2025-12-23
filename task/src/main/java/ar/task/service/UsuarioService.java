@@ -41,29 +41,27 @@ public class UsuarioService {
     }
 
         // B. CONVERSIÓN (DTO -> Entidades)
-        // Paso 1: Crear y llenar DatosUsuario
+        //  Crear y llenar DatosUsuario
         DatosUsuario datos = new DatosUsuario();
         datos.setNombre(usuarioDTO.getNombre());
         datos.setApellido(usuarioDTO.getApellido());
         datos.setCorreo(usuarioDTO.getCorreo());
-        datos.setActivo(true); // Por defecto activo al registrarse
+        datos.setActivo(true);
 
-        // TODO: MÁS ADELANTE ENCRIPTAREMOS ESTO CON SPRING SECURITY
-        //datos.setContrasenia(usuarioDTO.getContrasenia());
-        datos.setContrasenia(passwordEncoder.encode(usuarioDTO.getContrasenia())); // ✅ Encriptamos
+        datos.setContrasenia(passwordEncoder.encode(usuarioDTO.getContrasenia())); //   Encriptamos
 
-        // Paso 2: Crear y llenar Usuario
+        //Crear y llenar Usuario
         Usuario usuario = new Usuario();
         usuario.setUserName(usuarioDTO.getUserName());
 
-        // Paso 3: Relacionarlos (La magia del @OneToOne)
+        //  Relacionarlos
         usuario.setDatosUsuario(datos); // Al meter 'datos' dentro de 'usuario'...
 
-        // C. GUARDADO (Llamar al repositorio)
+        // GUARDADO (Llamar al repositorio)
         // Gracias al CASCADE.ALL, al guardar 'usuario', se guarda 'datos' automáticamente
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
 
-        // D. RESPUESTA (Entidad -> DTO Salida)
+        // RESPUESTA (Entidad -> DTO Salida)
         // Convertimos el resultado final a un DTO seguro (sin contraseña)
         UsuarioSalidaDTO respuesta = new UsuarioSalidaDTO();
         respuesta.setIdUsuario(usuarioGuardado.getIdUsuario());
@@ -78,16 +76,16 @@ public class UsuarioService {
 
  public UsuarioSalidaDTO login(String correo, String contrasenia) {
 
-        // 1. Buscamos al USUARIO COMPLETO (Padre) usando el correo
+        //  Buscamos al USUARIO COMPLETO (Padre) usando el correo
         Usuario usuario = usuarioRepository.findByDatosUsuario_Correo(correo)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // 2. Validamos contraseña (sacándola de los datos del usuario)
+        //  Validamos contraseña (sacándola de los datos del usuario)
         if (!passwordEncoder.matches(contrasenia, usuario.getDatosUsuario().getContrasenia())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
-        // 3. Llenamos el DTO con TODO (Ahora sí tenemos acceso a ambos lados)
+        //  Llenamos el DTO con TODO
         UsuarioSalidaDTO dto = new UsuarioSalidaDTO();
 
         // Datos del Padre

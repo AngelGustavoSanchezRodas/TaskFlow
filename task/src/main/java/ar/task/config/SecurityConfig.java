@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // 1. EL FILTRO DE SEGURIDAD
+    //  EL FILTRO DE SEGURIDAD
     // Este método configura qué URLs son públicas y cuáles privadas.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,7 +25,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 2. LA HERRAMIENTA DE ENCRIPTACIÓN
+    //  LA HERRAMIENTA DE ENCRIPTACIÓN
     // Creamos un "Bean" para poder inyectarlo en el Servicio después.
     @Bean
     public PasswordEncoder passwordEncoder() {
