@@ -11,4 +11,5 @@ public interface EquipoTrabajoRepository extends JpaRepository<EquipoTrabajo, In
 
     // Traer solo los equipos que no han sido borrados lógicamente
     List<EquipoTrabajo> findByActivoTrue();
+
 }

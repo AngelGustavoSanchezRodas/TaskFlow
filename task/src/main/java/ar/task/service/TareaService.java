@@ -100,6 +100,17 @@ public class TareaService {
         return dto;
     }
 
+    // CORRECCIÓN: Cambiamos 'TareaDTO' por 'List<TareaDTO>'
+    public List<TareaDTO> obtenerTareasPorUsuario(Integer idUsuario){
+
+        // Asegúrate de que este método exista en tu TareaRepository
+        List<Tarea> tareas = tareaRepository.findByUsuarioAsignado_IdUsuario(idUsuario);
+
+        return tareas.stream()
+                .map(this::convertirADTO)
+                .collect(Collectors.toList());
+    }
+
     // Método para cambiar SOLO el estado (Pendiente/Terminada)
     @Transactional
     public TareaDTO cambiarEstado(Integer idTarea, Boolean nuevoEstado) {

@@ -1,6 +1,7 @@
 package ar.task.controller;
 
 import ar.task.dtos.TareaDTO;
+import ar.task.entities.Tarea;
 import ar.task.service.TareaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,14 @@ public class TareaController {
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<TareaDTO>> obtenerTareasPorUsuario(@PathVariable Integer idUsuario) {
+
+        List<TareaDTO> tareas = tareaService.obtenerTareasPorUsuario(idUsuario);
+
+        return ResponseEntity.ok(tareas);
     }
 
     @GetMapping("/listaTareas/{idEquipo}")
