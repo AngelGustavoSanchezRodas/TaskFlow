@@ -29,14 +29,20 @@ public class EquipoService {
 
     //  CREAR UN EQUIPO NUEVO
     @Transactional
-    public EquipoDTO crearEquipo(EquipoDTO equipoDTO) {
+    public EquipoDTO crearEquipo(EquipoDTO equipoDTO, Integer idUsuarioCreador) {
+
+        // Guardar el equipo en la base de datos
         EquipoTrabajo equipo = new EquipoTrabajo();
         equipo.setNombre(equipoDTO.getNombre());
         equipo.setCategoria(equipoDTO.getCategoria());
         equipo.setActivo(true);
 
+        // Guardar el equipo
         EquipoTrabajo equipoGuardado = equipoRepository.save(equipo);
 
+        agregarMiembro(equipoGuardado.getIdEquipo(), idUsuarioCreador, "LIDER");
+
+        // Devolver el DTO con el ID asignado
         equipoDTO.setIdEquipo(equipoGuardado.getIdEquipo());
         equipoDTO.setActivo(true);
         return equipoDTO;

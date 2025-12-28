@@ -18,9 +18,9 @@ public class EquipoController {
     private EquipoService equipoService;
 
     @PostMapping("/crearEquipo")
-    public ResponseEntity<?> crearEquipo(@RequestBody EquipoDTO equipoDTO) {
+    public ResponseEntity<?> crearEquipo(@RequestBody EquipoDTO equipoDTO, @RequestParam Integer idUsuario) {
         try {
-            EquipoDTO crearEquipo = equipoService.crearEquipo(equipoDTO);
+            EquipoDTO crearEquipo = equipoService.crearEquipo(equipoDTO, idUsuario);
             return ResponseEntity.ok(crearEquipo);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

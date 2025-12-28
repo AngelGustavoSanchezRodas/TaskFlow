@@ -1,109 +1,122 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import Navbar from "./Navbar";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-function Navbar() {
-  const navigate = useNavigate();
-  const [equipos, setEquipos] = useState([]);
+function Home() {
+  // Estado para almacenar las tareas
+  const [tareas, setTareas] = useState([]);
 
-  // Cargar equipos apenas aparece el Navbar
+  // Cargar tareas al montar el componente
   useEffect(() => {
-    cargarEquipos();
+    cargarTareas();
   }, []);
 
-  const cargarEquipos = async () => {
-    const usuarioString = localStorage.getItem('usuario');
-    
-    if (usuarioString) {
-      const usuarioObj = JSON.parse(usuarioString);
-      const miId = usuarioObj.idUsuario;
+  // Función para cargar tareas desde el backend
+  const cargarTareas = async () => {
+    const usuarioString = localStorage.getItem("usuario");
 
-      try {
-        // Llamamos al endpoint que acabas de probar en Postman
-        const respuesta = await axios.get(`http://localhost:8080/api/equipo/mis-equipos/${miId}`);
-        setEquipos(respuesta.data);
-      } catch (error) {
-        console.error("Error al cargar equipos", error);
-      }
+    // Verificar si el usuario está en sesión
+    if (!usuarioString) {
+      console.error("No se encontró usuario en sesión");
+      return;
+    }
+
+    // Extraer el ID del usuario
+    const usuarioObj = JSON.parse(usuarioString);
+    const miId = usuarioObj.idUsuario;
+
+    console.log("Cargando tareas para el usuario ID:", miId);
+
+    try {
+      // Llamada al backend para obtener las tareas del usuario
+      const respuesta = await axios.get(
+        `http://localhost:8080/api/tareas/usuario/${miId}`
+      );
+
+      // Filtro de entrada: Solo guardamos las activas
+      const tareasActivas = respuesta.data.filter(t => t.estado === true);
+      setTareas(tareasActivas);
+
+    } catch (error) {
+      console.error("Error al cargar tareas:", error);
     }
   };
 
-  const cerrarSesion = () => {
-    localStorage.removeItem('usuario');
-    navigate('/');
-  }
+  // Función para cambiar el estado de una tarea
+  const cambiarEstadoTarea = async (idTarea, estadoActual) => {
+    const nuevoEstado = !estadoActual; 
+
+    try {
+      // 1. Actualizar en BD
+      await axios.patch(
+        `http://localhost:8080/api/tareas/${idTarea}/estado?estado=${nuevoEstado}`
+      );
+
+      // 2. Actualizar VISUALMENTE
+      setTareas(prevTareas => prevTareas.map(tarea => 
+        tarea.idTarea === idTarea ? { ...tarea, estado: nuevoEstado } : tarea
+      ));
+
+      // 3. TIMER DE DESAPARICIÓN
+      if (nuevoEstado === false) {
+          console.log(`La tarea ${idTarea} desaparecerá en breve...`);
+          setTimeout(() => {
+              setTareas(prevTareas => prevTareas.filter(t => t.idTarea !== idTarea));
+          }, 60000); // 1 minuto
+      }
+
+    } catch (error) {
+      console.error("Error al cambiar estado:", error);
+      alert("No se pudo actualizar la tarea");
+
+      cargarTareas(); // Revertir si falla
+    }
+  };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow-sm">
-      <div className="container-fluid">
-        {/* Marca / Logo */}
-        <span className="navbar-brand mb-0 h1 fw-bold">TaskFlow</span>
+    <div className="container mt-5">
+      <Navbar />
+      
+      <div className="row mt-4">
+        <h2 className="mb-3">Mis Tareas</h2>
+        
+        {tareas.length === 0 ? (
+          <div className="alert alert-info">No tienes tareas activas asignadas.</div>
+        ) : (
+          tareas.map((tarea) => (
+            <div className="col-md-4 mb-3" key={tarea.idTarea || tarea.id}>
+              {/* Tarjeta de tarea */}
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <h5 className="card-title text-primary">{tarea.titulo}</h5>
+                  <p className="card-text">{tarea.descripcion}</p>
+                  {/* Estado de la tarea */}
+                  <span className={`badge ${tarea.estado ? "bg-success" : "bg-secondary"}`}>
+                    {tarea.estado ? "Activa" : "Terminada"}
+                  </span>
 
-        {/* Botón para celular (Hamburguesa) */}
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            
-            <li className="nav-item">
-              <button className="btn nav-link text-white" onClick={() => navigate('/home')}>Inicio</button>
-            </li>
-
-            {/* 👇 AQUÍ ESTÁ EL MENÚ DESPLEGABLE 👇 */}
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
-                Mis Equipos
-              </a>
-              <ul className="dropdown-menu">
-                
-                {/* 1. Mapeamos el JSON que viste en Postman */}
-                {equipos.length === 0 ? (
-                  <li><span className="dropdown-item text-muted">No tienes equipos</span></li>
-                ) : (
-                  equipos.map((equipo) => (
-                    <li key={equipo.idEquipo}>
-                      <button className="dropdown-item d-flex justify-content-between align-items-center">
-                        {equipo.nombreEquipo}
-                        
-                        {/* Etiqueta con tu Rol (FullStack / Lider) */}
-                        <span className={`badge ms-2 ${equipo.miRol === 'Lider' ? 'bg-warning text-dark' : 'bg-info'}`}>
-                          {equipo.miRol}
-                        </span>
-                      </button>
-                    </li>
-                  ))
-                )}
-
-                <li><hr className="dropdown-divider" /></li>
-
-                {/* 2. Opciones de Gestión (Próximamente funcionales) */}
-                <li>
-                  <button className="dropdown-item text-primary fw-bold">
-                    <i className="bi bi-plus-circle"></i> + Crear Equipo Nuevo
-                  </button>
-                </li>
-                <li>
-                  <button className="dropdown-item text-success">
-                    <i className="bi bi-people"></i> Unirse a un Equipo
-                  </button>
-                </li>
-
-              </ul>
-            </li>
-          </ul>
-
-          {/* Botón Cerrar Sesión */}
-          <div className="d-flex">
-            <button className="btn btn-outline-danger btn-sm" onClick={cerrarSesion}>
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
+                  {/* Switch para cambiar estado */}
+                  <div className="mt-3 form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id={`switch-${tarea.idTarea}`} 
+                        checked={!tarea.estado} 
+                        onChange={() => cambiarEstadoTarea(tarea.idTarea, tarea.estado)}
+                      />
+                      <label className="form-check-label" htmlFor={`switch-${tarea.idTarea}`}>
+                        {tarea.estado ? "Marcar como terminada" : "Tarea finalizada"}
+                      </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
-    </nav>
+    </div>
   );
 }
 
-export default Navbar;
+export default Home;
