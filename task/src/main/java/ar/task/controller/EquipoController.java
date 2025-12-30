@@ -51,4 +51,21 @@ public class EquipoController {
             return ResponseEntity.badRequest().body("Error al cargar equipos: " + e.getMessage());
         }
     }
+
+    @PostMapping("/unirseAlEquipo")
+    public ResponseEntity<?> unirseAlEquipoComoColaborador (
+            @RequestParam Integer idEquipo,
+            @RequestParam Integer idUsuario) {
+        try
+        {
+            equipoService.unirseAlEquipo(idEquipo, idUsuario);
+            return ResponseEntity.ok("Usuario se unió al equipo exitosamente");
+        }
+        catch (Exception e)
+        {
+           return ResponseEntity.badRequest().body("Error al unirse al equipo: "+e.getMessage());
+        }
+
+    }
+
 }

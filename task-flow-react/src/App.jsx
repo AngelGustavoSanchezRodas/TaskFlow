@@ -1,12 +1,12 @@
 import React from 'react';
-import Login from './components/Login';
+import IndexLog from './components/Log-Register/IndexLog';
 import Home from './components/Home';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<IndexLog />} />
       <Route path="/home" element={<Home />} />
     </Routes>
   );
