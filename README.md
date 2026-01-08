@@ -5,7 +5,7 @@ Sistema de gestión de tareas y equipos colaborativos.
 Desarrollado como parte de un portafolio profesional para demostrar competencias en desarrollo Backend.
 
 ## 🛠 Tecnologías
-* **Lenguaje:** Java 17
+* **Lenguaje:** Java 21
 * **Framework:** Spring Boot 3
 * **Base de Datos:** PostgreSQL
 * **Documentación:** Swagger / OpenAPI
