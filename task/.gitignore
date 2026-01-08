@@ -35,3 +35,9 @@ build/
 ### Secretos de la Aplicación ###
 src/main/resources/application-secret.properties
 application-secret.properties
+
+/target/
+**.class
+.idea/
+*.iml
+.vscode/

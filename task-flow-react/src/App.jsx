@@ -1,16 +1,26 @@
-import React from 'react';
-import IndexLog from './components/Log-Register/IndexLog';
-import Home from './components/Home';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LoginForm from './components/Log-Register/LoginForm';
+import RegisterForm from './components/Log-Register/RegisterForm';
+import Home from './components/Home'; 
 import TeamDashboard from './components/EquipoComponente/TeamDashBoard';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<IndexLog />} />
-      <Route path="/home" element={<Home />} />
-      <Route path='/equipo/:idEquipo' element={<TeamDashboard />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginForm />} />
+
+        <Route path="/register" element={<RegisterForm />} />
+  
+        <Route path="/home" element={<Home />} />
+        
+        <Route path="/equipo/:idEquipo" element={<TeamDashboard />} />
+
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

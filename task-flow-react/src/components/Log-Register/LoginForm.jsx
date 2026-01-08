@@ -4,17 +4,19 @@ import axios from 'axios';
 import styles from '../../styles/Auth.module.css';
 
 function LoginForm() {
+    // Estados para correo y contraseña
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  // Función para manejar el envío del formulario de login
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
         // Mapear los nombres de los campos al DTO esperado por Java
         const response = await axios.post('http://localhost:8080/api/usuarios/login', { 
             correo: correo, 
-            contrasenia: password // 👈 CRÍTICO: Debe coincidir con el DTO de Java
+            contrasenia: password
         });
         
         // Guardamos la respuesta del DTO UsuarioSalidaDTO

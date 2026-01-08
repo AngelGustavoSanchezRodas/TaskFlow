@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.apache.logging.log4j.ThreadContext.isEmpty;
+
 @Service
 public class TareaService {
 
@@ -141,6 +143,33 @@ public class TareaService {
 
         // 4. RETORNAR: Convertimos a DTO para devolver la respuesta
         return convertirADTO(tareaActualizada);
+    }
+
+    @Transactional
+    public TareaDTO editarTarea(Integer idTarea, TareaDTO tareaDTO){
+        // 1. BUSCAR
+        Tarea tarea = tareaRepository.findById(idTarea).orElseThrow(()-> new RuntimeException("Tarea no encontrada"));
+
+        // 2. MODIFICAR
+        // Usamos un método auxiliar para actualizar solo los campos que vienen en el DTO
+        if (tareaDTO.getTitulo() != null && !tareaDTO.getTitulo().isEmpty()) {
+            tarea.setTitulo(tareaDTO.getTitulo());
+        }
+        // Actualizamos otros campos según sea necesario
+       if (tareaDTO.getDescripcion() != null) { // La descripción puede ser vacía, así que solo validamos null
+        tarea.setDescripcion(tareaDTO.getDescripcion());
+        }
+       // 3. GUARDAR
+       Tarea tareaActualizada = tareaRepository.save(tarea);
+
+         // 4. RETORNAR
+       TareaDTO respuesta = new TareaDTO();
+        respuesta.setIdTarea(tareaActualizada.getIdTarea());
+        respuesta.setTitulo(tareaActualizada.getTitulo());
+        respuesta.setDescripcion(tareaActualizada.getDescripcion());
+        respuesta.setEstado(tareaActualizada.getEstado());
+
+        return respuesta;
     }
 
     //  ELIMINAR TAREA

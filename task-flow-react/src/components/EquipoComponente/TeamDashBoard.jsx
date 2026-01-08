@@ -128,7 +128,8 @@ function TeamDashboard() {
                     onCambiarEstado={handleCambiarEstado} 
                     onEliminar={handleEliminar}
                     soyLider={soyLider} 
-                    miId={miId}          
+                    miId={miId}  
+                    recargarTareas={cargarDatos}        
                 />
             </div>
         </div>

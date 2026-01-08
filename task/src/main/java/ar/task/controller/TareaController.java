@@ -65,6 +65,16 @@ public class TareaController {
         }
     }
 
+    @PutMapping("/editar/{idTarea}")
+    public ResponseEntity<?> editarTarea(@PathVariable Integer idTarea, @RequestBody TareaDTO tareaDTO) {
+        try {
+            TareaDTO tareaEditada = tareaService.editarTarea(idTarea, tareaDTO);
+            return ResponseEntity.ok(tareaEditada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/eliminar/{idTarea}")
     public ResponseEntity<?> eliminarTareaEquipo(@PathVariable Integer idTarea) {
         try {
