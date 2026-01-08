@@ -1,93 +1,112 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styles from '../../styles/Auth.module.css';
 
-function RegisterForm({ onSuccess }) {
-  const [registroData, setRegistroData] = useState({
-    nombre: '',
-    apellido: '',
-    userName: '',
-    correo: '',
-    contrasenia: ''
-  });
+function RegisterForm() {
+  const [userName, setUserName] = useState(''); // 👈 NUEVO CAMPO
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleRegistro = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/usuarios/registrar', registroData);
-      
-      alert("¡Registro exitoso! Ahora por favor inicia sesión.");
-      
-      // Limpiamos formulario
-      setRegistroData({ nombre: '', apellido: '', userName: '', correo: '', contrasenia: '' });
-      
-      // Avisamos al padre para que cambie a Login
-      onSuccess(); 
-
+        // 👇 AHORA ENVIAMOS LOS NOMBRES EXACTOS QUE PIDE TU JAVA
+        await axios.post('http://localhost:8080/api/usuarios/registro', { 
+            userName: userName,     // Java espera "userName"
+            nombre: nombre,
+            apellido: apellido, 
+            correo: correo, 
+            contrasenia: password   // 👈 IMPORTANTE: Java espera "contrasenia", no "password"
+        });
+        
+        alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
+        navigate('/'); 
     } catch (error) {
-      console.error("Error registro:", error);
-      alert("Error al registrarse. Verifica los datos.");
+        console.error("Error en registro", error);
+        // Mostramos el mensaje exacto que manda el backend (ej: "El usuario ya existe")
+        alert(error.response?.data || "Hubo un error al registrar.");
     }
   };
 
   return (
-    <form onSubmit={handleRegistro} className="animate__animated animate__fadeIn">
-      <h4 className="text-center mb-4 text-primary">Crea tu cuenta</h4>
-      
-      <div className="row">
-        <div className="col-md-6 mb-3">
-          <label className="form-label">Nombre</label>
-          <input 
-            type="text" className="form-control"
-            value={registroData.nombre}
-            onChange={(e) => setRegistroData({...registroData, nombre: e.target.value})}
-            required
-          />
+    <div className={styles.authContainer}>
+        <div className={`card ${styles.authCard}`}>
+            <h2 className={styles.authTitle}>Crear Cuenta</h2>
+            
+            <form onSubmit={handleRegistro}>
+                
+                {/* 👇 CAMPO NUEVO: NOMBRE DE USUARIO */}
+                <div className="mb-3">
+                    <label className="form-label text-muted small fw-bold">Usuario (Nick)</label>
+                    <input 
+                        type="text" 
+                        className={`form-control ${styles.inputField}`} 
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        placeholder="ej: juanperez99"
+                        required
+                    />
+                </div>
+
+                <div className="row">
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label text-muted small fw-bold">Nombre</label>
+                        <input 
+                            type="text" 
+                            className={`form-control ${styles.inputField}`} 
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label text-muted small fw-bold">Apellido</label>
+                        <input 
+                            type="text" 
+                            className={`form-control ${styles.inputField}`} 
+                            value={apellido}
+                            onChange={(e) => setApellido(e.target.value)}
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label text-muted small fw-bold">Correo</label>
+                    <input 
+                        type="email" 
+                        className={`form-control ${styles.inputField}`} 
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label className="form-label text-muted small fw-bold">Contraseña</label>
+                    <input 
+                        type="password" 
+                        className={`form-control ${styles.inputField}`} 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                
+                <button type="submit" className={`btn btn-primary ${styles.btnPrimary}`}>
+                    Registrarse
+                </button>
+            </form>
+
+            <div className="text-center mt-4">
+                <small className="text-muted">¿Ya tienes cuenta? <a href="/" className="text-primary text-decoration-none fw-bold">Inicia Sesión</a></small>
+            </div>
         </div>
-        <div className="col-md-6 mb-3">
-          <label className="form-label">Apellido</label>
-          <input 
-            type="text" className="form-control"
-            value={registroData.apellido}
-            onChange={(e) => setRegistroData({...registroData, apellido: e.target.value})}
-            required
-          />
-        </div>
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Usuario (UserName)</label>
-        <input 
-          type="text" className="form-control" placeholder="Ej: usuario123"
-          value={registroData.userName}
-          onChange={(e) => setRegistroData({...registroData, userName: e.target.value})}
-          required
-        />
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Correo Electrónico</label>
-        <input 
-          type="email" className="form-control"
-          value={registroData.correo}
-          onChange={(e) => setRegistroData({...registroData, correo: e.target.value})}
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="form-label">Contraseña</label>
-        <input 
-          type="password" className="form-control"
-          value={registroData.contrasenia}
-          onChange={(e) => setRegistroData({...registroData, contrasenia: e.target.value})}
-          required
-        />
-      </div>
-
-      <div className="d-grid">
-        <button type="submit" className="btn btn-success btn-lg">Registrarse</button>
-      </div>
-    </form>
+    </div>
   );
 }
 

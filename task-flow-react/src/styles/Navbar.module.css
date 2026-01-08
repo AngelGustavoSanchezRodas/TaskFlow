@@ -1,0 +1,42 @@
+/* src/styles/Navbar.module.css */
+.navbar {
+    background: #1a1d20 !important; /* Oscuro profundo elegante */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 0.8rem 1rem;
+}
+
+.brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    /* Efecto de texto degradado (Azul a Cyan) */
+    background: linear-gradient(45deg, #0d6efd, #0dcaf0); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.navLink {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.navLink:hover, .activeLink {
+    color: #fff !important;
+    transform: translateY(-2px); /* Pequeño salto al pasar mouse */
+}
+
+.btnLogout {
+    border: 1px solid rgba(220, 53, 69, 0.5);
+    color: #ff6b6b;
+    background: transparent;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.btnLogout:hover {
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
+}

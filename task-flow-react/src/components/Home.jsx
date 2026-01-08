@@ -1,120 +1,99 @@
-import Navbar from "./NavbarComponente/Navbar";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Navbar from './NavbarComponente/Navbar'; 
+import styles from '../styles/Home.module.css'; 
 
 function Home() {
-  // Estado para almacenar las tareas
-  const [tareas, setTareas] = useState([]);
+  const [equipos, setEquipos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const navigate = useNavigate();
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
 
-  // Cargar tareas al montar el componente
   useEffect(() => {
-    cargarTareas();
+    if (usuario) {
+        cargarEquipos();
+    } else {
+        navigate('/'); 
+    }
   }, []);
 
-  // Función para cargar tareas desde el backend
-  const cargarTareas = async () => {
-    const usuarioString = localStorage.getItem("usuario");
-
-    // Verificar si el usuario está en sesión
-    if (!usuarioString) {
-      console.error("No se encontró usuario en sesión");
-      return;
-    }
-
-    // Extraer el ID del usuario
-    const usuarioObj = JSON.parse(usuarioString);
-    const miId = usuarioObj.idUsuario;
-
-    console.log("Cargando tareas para el usuario ID:", miId);
-
+  const cargarEquipos = async () => {
     try {
-      // Llamada al backend para obtener las tareas del usuario
-      const respuesta = await axios.get(
-        `http://localhost:8080/api/tareas/usuario/${miId}`
-      );
-
-      // Filtro de entrada: Solo guardamos las activas
-      const tareasActivas = respuesta.data.filter(t => t.estado === true);
-      setTareas(tareasActivas);
-
+        const response = await axios.get(`http://localhost:8080/api/equipo/mis-equipos/${usuario.idUsuario}`);
+        setEquipos(response.data);
     } catch (error) {
-      console.error("Error al cargar tareas:", error);
+        console.error("Error cargando equipos", error);
+    } finally {
+        setCargando(false);
     }
   };
 
-  // Función para cambiar el estado de una tarea
-  const cambiarEstadoTarea = async (idTarea, estadoActual) => {
-    const nuevoEstado = !estadoActual; 
-
-    try {
-      // 1. Actualizar en BD
-      await axios.patch(
-        `http://localhost:8080/api/tareas/${idTarea}/estado?estado=${nuevoEstado}`
-      );
-
-      // 2. Actualizar VISUALMENTE
-      setTareas(prevTareas => prevTareas.map(tarea => 
-        tarea.idTarea === idTarea ? { ...tarea, estado: nuevoEstado } : tarea
-      ));
-
-      // 3. TIMER DE DESAPARICIÓN
-      if (nuevoEstado === false) {
-          console.log(`La tarea ${idTarea} desaparecerá en breve...`);
-          setTimeout(() => {
-              setTareas(prevTareas => prevTareas.filter(t => t.idTarea !== idTarea));
-          }, 60000); // 1 minuto
-      }
-
-    } catch (error) {
-      console.error("Error al cambiar estado:", error);
-      alert("No se pudo actualizar la tarea");
-
-      cargarTareas(); // Revertir si falla
-    }
+  const irAlDashboard = (idEquipo) => {
+    navigate(`/equipo/${idEquipo}`);
   };
 
   return (
-    <div className="container mt-5">
-      <Navbar />
-      
-      <div className="row mt-4">
-        <h2 className="mb-3">Mis Tareas</h2>
-        
-        {tareas.length === 0 ? (
-          <div className="alert alert-info">No tienes tareas activas asignadas.</div>
-        ) : (
-          tareas.map((tarea) => (
-            <div className="col-md-4 mb-3" key={tarea.idTarea || tarea.id}>
-              {/* Tarjeta de tarea */}
-              <div className="card shadow-sm">
-                <div className="card-body">
-                  <h5 className="card-title text-primary">{tarea.titulo}</h5>
-                  <p className="card-text">{tarea.descripcion}</p>
-                  {/* Estado de la tarea */}
-                  <span className={`badge ${tarea.estado ? "bg-success" : "bg-secondary"}`}>
-                    {tarea.estado ? "Activa" : "Terminada"}
-                  </span>
+    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+        <Navbar />
 
-                  {/* Switch para cambiar estado */}
-                  <div className="mt-3 form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id={`switch-${tarea.idTarea}`} 
-                        checked={!tarea.estado} 
-                        onChange={() => cambiarEstadoTarea(tarea.idTarea, tarea.estado)}
-                      />
-                      <label className="form-check-label" htmlFor={`switch-${tarea.idTarea}`}>
-                        {tarea.estado ? "Marcar como terminada" : "Tarea finalizada"}
-                      </label>
-                  </div>
+        <div className="container mt-5">
+            <div className={`d-flex justify-content-between align-items-center ${styles.welcomeSection}`}>
+                <div>
+                    <h2 className={styles.sectionTitle}>Espacios de Trabajo</h2>
+                    <p className="text-muted mb-0">Selecciona un proyecto para comenzar.</p>
                 </div>
-              </div>
             </div>
-          ))
-        )}
-      </div>
+
+            {cargando ? (
+                <div className="text-center py-5">
+                    <div className="spinner-border text-primary" role="status"></div>
+                </div>
+            ) : equipos.length === 0 ? (
+                <div className="text-center py-5">
+                    <div className="mb-3">
+                        <i className="bi bi-box-seam display-1 text-muted opacity-25"></i>
+                    </div>
+                    <h4 className="fw-bold text-secondary">Aún no tienes equipos</h4>
+                    <p className="text-muted">Crea uno nuevo desde el menú superior.</p>
+                </div>
+            ) : (
+                <div className="row g-4">
+                    {equipos.map((equipo) => (
+                        <div className="col-md-4 col-lg-3" key={equipo.idEquipo}>
+                            <div className={`shadow-sm ${styles.teamCard}`} onClick={() => irAlDashboard(equipo.idEquipo)}>
+                                <div className="d-flex justify-content-between align-items-start">
+                                    <div className={styles.teamIcon}>
+                                        {/* 👇 2. DATOS CORREGIDOS SEGÚN TU DTO */}
+                                        {/* Java manda 'nombreEquipo', no 'nombre' */}
+                                        {equipo.nombreEquipo ? equipo.nombreEquipo.charAt(0).toUpperCase() : '#'}
+                                    </div>
+                                    
+                                    {/* Mostramos el Rol que viene del Backend */}
+                                    <span className={`badge bg-light text-primary border ${styles.roleBadge}`}>
+                                        {equipo.miRol}
+                                    </span>
+                                </div>
+                                
+                                {/* 👇 Usamos 'nombreEquipo' */}
+                                <h5 className="fw-bold text-dark mb-2">{equipo.nombreEquipo}</h5>
+                                
+                                {/* 👇 Usamos 'categoria' porque tu entidad no tiene descripción */}
+                                <p className="text-muted small mb-0 text-truncate">
+                                    <i className="bi bi-tag-fill me-1"></i>
+                                    {equipo.categoria || "General"}
+                                </p>
+                                
+                                <div className="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
+                                    <small className="text-muted">Entrar al panel</small>
+                                    <i className="bi bi-arrow-right text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
     </div>
   );
 }

@@ -78,6 +78,8 @@ public class TareaService {
     }
 
     // Método auxiliar privado para convertir Entidad -> DTO (para no repetir código)
+   // ... dentro de TareaService ...
+
     private TareaDTO convertirADTO(Tarea tarea) {
         TareaDTO dto = new TareaDTO();
         dto.setIdTarea(tarea.getIdTarea());
@@ -86,15 +88,25 @@ public class TareaService {
         dto.setEstado(tarea.getEstado());
         dto.setPrioridad(tarea.getPrioridad());
         dto.setFechaFin(tarea.getFechaFin());
-
         dto.setCategoria(tarea.getCategoria());
 
-        // Solo devolvemos los IDs, no los objetos enteros
         dto.setIdEquipo(tarea.getEquipoTrabajo().getIdEquipo());
         dto.setIdUsuarioCreador(tarea.getUsuarioCreador().getIdUsuario());
 
         if (tarea.getUsuarioAsignado() != null) {
             dto.setIdUsuarioAsignado(tarea.getUsuarioAsignado().getIdUsuario());
+
+            //  LÓGICA NUEVA PARA OBTENER EL NOMBRE
+            if (tarea.getUsuarioAsignado().getDatosUsuario() != null) {
+                String nombre = tarea.getUsuarioAsignado().getDatosUsuario().getNombre();
+                String apellido = tarea.getUsuarioAsignado().getDatosUsuario().getApellido();
+                dto.setNombreResponsable(nombre + " " + apellido);
+            } else {
+                // Si por alguna razón no tiene datos personales, usamos el username
+                dto.setNombreResponsable(tarea.getUsuarioAsignado().getUserName());
+            }
+        } else {
+            dto.setNombreResponsable("Sin Asignar");
         }
 
         return dto;
@@ -131,15 +143,15 @@ public class TareaService {
         return convertirADTO(tareaActualizada);
     }
 
-   // Cambiamos a 'void' porque al borrar ya no tenemos objeto que devolver
+    //  ELIMINAR TAREA
     public void eliminarTarea(Integer idTarea) {
 
-        // 1. VERIFICAR (Usamos un if simple)
+        //  VERIFICAR (Usamos un if simple)
         if (!tareaRepository.existsById(idTarea)) {
             throw new RuntimeException("Error: No se encontró la tarea con ID " + idTarea);
         }
 
-        // 2. BORRAR
+        //  BORRAR
         tareaRepository.deleteById(idTarea);
     }
 

@@ -11,6 +11,7 @@ import ar.task.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ar.task.dtos.MiembroDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,6 +104,31 @@ public class EquipoService {
         // Simplemente reutilizamos el método existente para agregar al usuario como "COLABORADOR"
         this.agregarMiembro(idEquipo, IdUsuario, "COLABORADOR");
 
+    }
+
+    public List<MiembroDTO> obtenerMiembrosDelEquipo(Integer idEquipo) {
+        List<UsuarioEquipo> membresias = usuarioEquipoRepository.findByEquipoTrabajo_IdEquipo(idEquipo);
+
+        return membresias.stream()
+                .map(m -> {
+                    MiembroDTO dto = new MiembroDTO();
+
+                    // ID sigue estando en Usuario
+                    dto.setIdUsuario(m.getUsuario().getIdUsuario());
+
+                    // Datos de DatosUsuario
+                    if (m.getUsuario().getDatosUsuario() != null) {
+                        dto.setNombre(m.getUsuario().getDatosUsuario().getNombre());
+                        dto.setApellido(m.getUsuario().getDatosUsuario().getApellido());
+                        dto.setCorreo(m.getUsuario().getDatosUsuario().getCorreo());
+                    }
+
+                    // El rol sigue estando en la tabla intermedia
+                    dto.setRol(m.getRol());
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 }

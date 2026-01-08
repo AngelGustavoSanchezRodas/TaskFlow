@@ -2,6 +2,7 @@ package ar.task.controller;
 
 import ar.task.dtos.EquipoDTO;
 import ar.task.dtos.EquipoUsuarioDTO;
+import ar.task.dtos.MiembroDTO;
 import ar.task.service.EquipoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,17 @@ public class EquipoController {
            return ResponseEntity.badRequest().body("Error al unirse al equipo: "+e.getMessage());
         }
 
+    }
+
+    // GET: /api/equipo/1/miembros
+    @GetMapping("/{idEquipo}/miembros")
+    public ResponseEntity<?> obtenerMiembros(@PathVariable Integer idEquipo) {
+        try {
+            List<MiembroDTO> miembros = equipoService.obtenerMiembrosDelEquipo(idEquipo);
+            return ResponseEntity.ok(miembros);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al obtener miembros: " + e.getMessage());
+        }
     }
 
 }

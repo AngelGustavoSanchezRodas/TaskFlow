@@ -17,4 +17,6 @@ public class TareaDTO {
     private Integer idEquipo;
     private Integer idUsuarioCreador;
     private Integer idUsuarioAsignado;
+
+    private String nombreResponsable;
 }

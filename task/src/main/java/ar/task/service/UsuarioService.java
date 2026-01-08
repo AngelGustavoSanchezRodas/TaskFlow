@@ -28,8 +28,6 @@ public class UsuarioService {
     @Transactional // 3. Si algo falla en medio del proceso, hace "rollback" (deshace todo)
     public UsuarioSalidaDTO registrarUsuario(UsuarioRegistroDTO usuarioDTO) {
 
-        // A. VALIDACIÓN (Lógica de Negocio)
-        // 1. VALIDACIONES PREVIAS (El Escudo)
     // Verificamos si el CORREO ya existe
     if (datosUsuarioRepository.findByCorreo(usuarioDTO.getCorreo()).isPresent()) {
         throw new RuntimeException("Error: El correo " + usuarioDTO.getCorreo() + " ya está registrado.");
@@ -48,7 +46,8 @@ public class UsuarioService {
         datos.setCorreo(usuarioDTO.getCorreo());
         datos.setActivo(true);
 
-        datos.setContrasenia(passwordEncoder.encode(usuarioDTO.getContrasenia())); //   Encriptamos
+        //   Encriptamos
+        datos.setContrasenia(passwordEncoder.encode(usuarioDTO.getContrasenia()));
 
         //Crear y llenar Usuario
         Usuario usuario = new Usuario();

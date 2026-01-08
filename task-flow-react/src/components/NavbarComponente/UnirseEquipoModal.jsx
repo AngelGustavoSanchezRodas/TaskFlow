@@ -29,6 +29,7 @@ function UnirseEquipoModal({ show, onClose, onSuccess }) {
     }
   };
 
+  // No renderizamos nada si show es false
   if (!show) return null;
 
   return (
@@ -36,8 +37,10 @@ function UnirseEquipoModal({ show, onClose, onSuccess }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
+            {/* Boton para unirse a un equipo */}
             <h5 className="modal-title">Unirse a un Equipo</h5>
             <button type="button" className="btn-close" onClick={onClose}></button>
+            {/* Boton para unirse a un equipo */}
           </div>
           <div className="modal-body">
             <p>Ingresa el ID del equipo al que deseas unirte.</p>

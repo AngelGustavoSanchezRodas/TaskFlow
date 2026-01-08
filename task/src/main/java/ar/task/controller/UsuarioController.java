@@ -15,10 +15,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // POST: Para registrarse
-    // URL: http://localhost:8080/api/usuarios/registro
-   // En UsuarioController.java
-
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody UsuarioRegistroDTO usuarioRegistroDTO) {
         try
