@@ -61,9 +61,25 @@ Sigue estos pasos para correr el proyecto en tu máquina:
 # Clonar el repositorio
 git clone [https://github.com/TU_USUARIO/TaskFlow.git](https://github.com/TU_USUARIO/TaskFlow.git)
 
+# Navegar a la carpeta del frontend
+cd TaskFlow/frontend
+
+# Instalar dependencias
+npm install
+
+# Correr servidor de desarrollo
+npm run dev
+
 # Navegar a la carpeta del backend
 cd TaskFlow/backend
 
 # Configurar base de datos en application.properties
 # Ejecutar el proyecto
 mvn spring-boot:run
+
+👤 Autor
+Ángel Gustavo Sánchez Rodas
+
+💼https://is.gd/PerfilLinkedln  
+
+📂https://is.gd/PerfilGitHub
