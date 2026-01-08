@@ -44,11 +44,11 @@ TaskFlow es una aplicación web colaborativa que permite a los equipos organizar
 
 ## 📸 Capturas de Pantalla
 
-| Login |
-| <img width="1919" height="913" alt="Captura de pantalla 2026-01-08 131020" src="https://github.com/user-attachments/assets/f724bc7e-f811-49cb-8c9a-0fb760274790" /> 
-| Creacion de Tareas |
+| Login | Edición de Tareas |
+|:---:|:---:|
+<img width="1919" height="913" alt="Captura de pantalla 2026-01-08 131020" src="https://github.com/user-attachments/assets/f724bc7e-f811-49cb-8c9a-0fb760274790" /> 
 |  <img width="531" height="578" alt="Captura de pantalla 2026-01-08 131215" src="https://github.com/user-attachments/assets/637bfaad-af0f-4a04-8ddd-b6326d0db4c8" />
-|
+
 
 ---
 
