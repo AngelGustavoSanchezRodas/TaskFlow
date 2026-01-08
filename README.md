@@ -44,13 +44,13 @@ TaskFlow es una aplicación web colaborativa que permite a los equipos organizar
 ---
 
 ## 📸 Capturas de Pantalla
-<img width="1910" height="912" alt="Captura de pantalla 2026-01-08 131249" src="https://github.com/user-attachments/assets/2d423751-3f23-42b0-be9c-6717cea18f27" />
-
-
-
-| Login | Edición de Tareas |
-|:---:|:---:|
-| ![Login](assets/login.png) | ![Modal](assets/modal.png) |
+<img width="1919" height="913" alt="Captura de pantalla 2026-01-08 131020" src="https://github.com/user-attachments/assets/0bae426f-edb9-4540-aab2-d47fcc95861d" />
+<img width="1882" height="893" alt="Captura de pantalla 2026-01-08 131037" src="https://github.com/user-attachments/assets/1b8e7ec7-8bdd-4051-a98c-8730877d25ea" />
+<img width="1906" height="913" alt="Captura de pantalla 2026-01-08 131109" src="https://github.com/user-attachments/assets/c175fb9d-ea63-4c67-af77-2058257bfbf4" />
+<img width="1905" height="907" alt="Captura de pantalla 2026-01-08 131122" src="https://github.com/user-attachments/assets/b32ff907-b074-4468-811b-94f649c284c2" />
+<img width="1908" height="908" alt="Captura de pantalla 2026-01-08 131205" src="https://github.com/user-attachments/assets/579e9869-bf1d-474e-9de4-a0f08dc879c1" />
+<img width="531" height="578" alt="Captura de pantalla 2026-01-08 131215" src="https://github.com/user-attachments/assets/e53bf1ac-494b-4f71-afcf-4e65cdd0bb00" />
+<img width="1910" height="912" alt="Captura de pantalla 2026-01-08 131249" src="https://github.com/user-attachments/assets/f9bb49aa-d56d-47ea-865d-60705c1bd85b" />
 
 ---
 
