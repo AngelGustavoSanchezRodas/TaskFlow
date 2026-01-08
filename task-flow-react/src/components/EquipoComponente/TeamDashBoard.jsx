@@ -8,8 +8,11 @@ import CrearTareaModal from './CrearTarea';
 import styles from '../../styles/TeamDashboard.module.css';
 
 function TeamDashboard() {
+
+    // Obtener el ID del equipo desde los parámetros de la URL
   const { idEquipo } = useParams();
   
+  // Estados para miembros, tareas, carga, modal y rol
   const [miembros, setMiembros] = useState([]);
   const [tareas, setTareas] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -17,10 +20,12 @@ function TeamDashboard() {
   const [soyLider, setSoyLider] = useState(false);
   const [miId, setMiId] = useState(null);
 
+  // Cargar datos al montar el componente o cambiar idEquipo
   useEffect(() => {
     cargarDatos();
   }, [idEquipo]);
 
+  // Función para cargar miembros y tareas
   const cargarDatos = async () => {
     try {
       setCargando(true);
@@ -34,6 +39,7 @@ function TeamDashboard() {
       
       const usuarioLogueado = JSON.parse(localStorage.getItem('usuario'));
       
+      // OBTENER MI ID Y VERIFICAR SI SOY LIDER
       if (usuarioLogueado) {
           const idActual = Number(usuarioLogueado.idUsuario);
           setMiId(idActual);
@@ -55,6 +61,7 @@ function TeamDashboard() {
     }
   };
 
+  // Manejar cambio de estado de tarea
   const handleCambiarEstado = async (idTarea, estadoActual) => {
     try {
         const nuevoEstado = !estadoActual;
@@ -71,6 +78,7 @@ function TeamDashboard() {
     }
   };
 
+  // Manejar eliminación de tarea
   const handleEliminar = async (idTarea) => {
     if (!window.confirm("¿Estás seguro de que deseas eliminar esta tarea permanentemente?")) {
         return;
@@ -90,7 +98,7 @@ function TeamDashboard() {
         
         <div className="row mt-5">
             <div className="col-12 mb-4">
-                {/* 👇 CABECERA ESTILIZADA CON CSS MODULES (SIN BARRA DE PROGRESO) */}
+                {/*  CABECERA ESTILIZADA CON CSS MODULES (SIN BARRA DE PROGRESO) */}
                 <div className={`card shadow-lg ${styles.dashboardHeader}`}>
                     <div className="card-body d-flex justify-content-between align-items-center">
                         <div>

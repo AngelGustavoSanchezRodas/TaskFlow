@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Componente para listar los miembros del equipo
 function MiembrosList({ miembros, cargando }) {
   return (
     <div className="card shadow-sm h-100">

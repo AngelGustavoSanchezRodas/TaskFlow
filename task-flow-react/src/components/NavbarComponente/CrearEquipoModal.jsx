@@ -5,12 +5,14 @@ function CrearEquipoModal({ show, onClose, onSuccess }) {
   // Estado local del formulario
   const [nuevoEquipo, setNuevoEquipo] = useState({ nombre: "", categoria: "" });
 
+  // Función para manejar la creación del equipo
   const handleCrear = async () => {
     const usuarioString = localStorage.getItem('usuario');
     if (!usuarioString) return;
     const usuarioObj = JSON.parse(usuarioString);
 
     try {
+      // Llamada a la API para crear el equipo
       await axios.post(
         `http://localhost:8080/api/equipo/crearEquipo?idUsuario=${usuarioObj.idUsuario}`,
         { nombre: nuevoEquipo.nombre, categoria: nuevoEquipo.categoria }

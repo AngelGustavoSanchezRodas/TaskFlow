@@ -5,13 +5,14 @@ function UnirseEquipoModal({ show, onClose, onSuccess }) {
   // Estado local para el ID
   const [idEquipoUnirse, setIdEquipoUnirse] = useState("");
 
+  // Función para manejar la unión al equipo
   const handleUnirse = async () => {
     const usuarioString = localStorage.getItem('usuario');
     if (!usuarioString) return;
     const usuarioObj = JSON.parse(usuarioString);
 
     try {
-      // URL corregida
+      // Llamada a la API para unirse al equipo
       await axios.post(
         `http://localhost:8080/api/equipo/unirseAlEquipo?idEquipo=${idEquipoUnirse}&idUsuario=${usuarioObj.idUsuario}`
       );

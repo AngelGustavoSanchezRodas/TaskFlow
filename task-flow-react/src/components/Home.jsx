@@ -5,11 +5,15 @@ import Navbar from './NavbarComponente/Navbar';
 import styles from '../styles/Home.module.css'; 
 
 function Home() {
+    // Estado para equipos y carga
   const [equipos, setEquipos] = useState([]);
   const [cargando, setCargando] = useState(true);
+  // Hook de navegación
   const navigate = useNavigate();
+  // Obtener usuario del localStorage
   const usuario = JSON.parse(localStorage.getItem('usuario'));
 
+    // Cargar equipos al montar el componente
   useEffect(() => {
     if (usuario) {
         cargarEquipos();
@@ -18,6 +22,7 @@ function Home() {
     }
   }, []);
 
+  // Función para cargar los equipos del usuario
   const cargarEquipos = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/equipo/mis-equipos/${usuario.idUsuario}`);
@@ -29,6 +34,7 @@ function Home() {
     }
   };
 
+  // Navegar al dashboard del equipo
   const irAlDashboard = (idEquipo) => {
     navigate(`/equipo/${idEquipo}`);
   };
@@ -75,10 +81,10 @@ function Home() {
                                     </span>
                                 </div>
                                 
-                                {/* 👇 Usamos 'nombreEquipo' */}
+                                {/*  Usamos 'nombreEquipo' */}
                                 <h5 className="fw-bold text-dark mb-2">{equipo.nombreEquipo}</h5>
                                 
-                                {/* 👇 Usamos 'categoria' porque tu entidad no tiene descripción */}
+                                {/*  Usamos 'categoria' porque tu entidad no tiene descripción */}
                                 <p className="text-muted small mb-0 text-truncate">
                                     <i className="bi bi-tag-fill me-1"></i>
                                     {equipo.categoria || "General"}

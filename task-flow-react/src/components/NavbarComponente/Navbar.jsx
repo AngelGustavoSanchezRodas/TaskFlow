@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/Navbar.module.css";
-
-// 👇 Importamos tus modales existentes
 import CrearEquipoModal from "./CrearEquipoModal";
 import UnirseEquipoModal from "./UnirseEquipoModal";
 
 function Navbar() {
+  // Hook de navegación
   const navigate = useNavigate();
+  // Obtener usuario del localStorage
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
   // Estados para controlar los modales
   const [showCrear, setShowCrear] = useState(false);
   const [showUnirse, setShowUnirse] = useState(false);
 
+  // Función para cerrar sesión
   const handleLogout = () => {
     localStorage.removeItem("usuario");
     navigate("/");

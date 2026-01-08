@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import TareaFormBody from './TareaFormBody'; 
 
+// Componente para crear una nueva tarea
 function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
   const usuarioLogueado = JSON.parse(localStorage.getItem('usuario'));
 
@@ -14,6 +15,7 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
     idUsuarioAsignado: ""
   };
 
+  // Estado local de la tarea
   const [tarea, setTarea] = useState(initialState);
 
   const handleCrear = async () => {
@@ -62,7 +64,7 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
           </div>
           
           <div className="modal-body">
-            {/* 👇 Aquí inyectamos el formulario visual */}
+            {/*  Aquí inyectamos el formulario visual */}
             <TareaFormBody 
                 tarea={tarea} 
                 setTarea={setTarea} 

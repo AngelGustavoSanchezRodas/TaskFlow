@@ -1,14 +1,13 @@
 import React from 'react';
-// 👇 1. IMPORTANTE: Importamos el Módulo CSS
 import styles from '../../styles/TeamDashboard.module.css';
 
 function TareasList({ tareas, onCambiarEstado, onEliminar, soyLider, miId }) {
   
-  // 👇 2. ACTUALIZADO: Ahora devolvemos las clases del módulo
+    // Función para obtener la clase de borde según el estado y prioridad
   const getClaseBorde = (tarea) => {
-    if (!tarea.estado) return styles.borderFinalizada; // Clase gris
-    if (tarea.prioridad) return styles.borderUrgente;  // Clase roja
-    return styles.borderNormal;                        // Clase verde
+    if (!tarea.estado) return styles.borderFinalizada; 
+    if (tarea.prioridad) return styles.borderUrgente;  
+    return styles.borderNormal;                        
   };
 
   return (
@@ -31,7 +30,7 @@ function TareasList({ tareas, onCambiarEstado, onEliminar, soyLider, miId }) {
                     const esMiTarea = Number(tarea.idUsuarioAsignado) === Number(miId);
                     
                     return (
-                        // 👇 3. ACTUALIZADO: Usamos styles.taskCard y la función dinámica
+                        
                         <div 
                             className={`card mb-3 shadow-sm ${styles.taskCard} ${getClaseBorde(tarea)}`} 
                             key={tarea.idTarea}

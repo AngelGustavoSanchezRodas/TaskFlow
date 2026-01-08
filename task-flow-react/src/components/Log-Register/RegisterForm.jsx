@@ -14,13 +14,13 @@ function RegisterForm() {
   const handleRegistro = async (e) => {
     e.preventDefault();
     try {
-        // 👇 AHORA ENVIAMOS LOS NOMBRES EXACTOS QUE PIDE TU JAVA
+        //  AHORA ENVIAMOS LOS NOMBRES EXACTOS QUE PIDE TU JAVA
         await axios.post('http://localhost:8080/api/usuarios/registro', { 
             userName: userName,     // Java espera "userName"
             nombre: nombre,
             apellido: apellido, 
             correo: correo, 
-            contrasenia: password   // 👈 IMPORTANTE: Java espera "contrasenia", no "password"
+            contrasenia: password   
         });
         
         alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
@@ -39,7 +39,7 @@ function RegisterForm() {
             
             <form onSubmit={handleRegistro}>
                 
-                {/* 👇 CAMPO NUEVO: NOMBRE DE USUARIO */}
+               
                 <div className="mb-3">
                     <label className="form-label text-muted small fw-bold">Usuario (Nick)</label>
                     <input 

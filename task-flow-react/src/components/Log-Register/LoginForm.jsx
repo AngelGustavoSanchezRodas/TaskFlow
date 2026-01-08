@@ -11,7 +11,7 @@ function LoginForm() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-        // 👇 SOLUCIÓN: Mapeamos "password" a "contrasenia"
+        // Mapear los nombres de los campos al DTO esperado por Java
         const response = await axios.post('http://localhost:8080/api/usuarios/login', { 
             correo: correo, 
             contrasenia: password // 👈 CRÍTICO: Debe coincidir con el DTO de Java

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Componente para el cuerpo del formulario de tarea
 function TareaFormBody({ tarea, setTarea, miembros }) {
   
   // Función auxiliar para actualizar el estado más limpio
