@@ -39,7 +39,7 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
       };
 
       // 3. Llamada API
-      await axios.post('http://localhost:8080/api/tareas/crearTarea', payload);
+      await axios.post('https://taskflow-production-b169.up.railway.app/api/tareas/crearTarea', payload);
       
       alert("¡Tarea asignada exitosamente!");
       setTarea(initialState); // Resetear form

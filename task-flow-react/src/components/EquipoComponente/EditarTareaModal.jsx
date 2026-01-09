@@ -21,7 +21,7 @@ function EditarTareaModal({ show, onClose, onSuccess, tarea }) {
         e.preventDefault();
         try {
             //  Llamamos al endpoint que acabamos de crear en Java
-            await axios.put(`http://localhost:8080/api/tareas/editar/${tarea.idTarea}`, {
+            await axios.put(`https://taskflow-production-b169.up.railway.app/api/tareas/editar/${tarea.idTarea}`, {
                 nombre,
                 descripcion
             });

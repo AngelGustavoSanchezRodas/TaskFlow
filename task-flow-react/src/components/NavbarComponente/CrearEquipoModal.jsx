@@ -14,7 +14,7 @@ function CrearEquipoModal({ show, onClose, onSuccess }) {
     try {
       // Llamada a la API para crear el equipo
       await axios.post(
-        `http://localhost:8080/api/equipo/crearEquipo?idUsuario=${usuarioObj.idUsuario}`,
+        `https://taskflow-production-b169.up.railway.app/api/equipo/crearEquipo?idUsuario=${usuarioObj.idUsuario}`,
         { nombre: nuevoEquipo.nombre, categoria: nuevoEquipo.categoria }
       );
       
