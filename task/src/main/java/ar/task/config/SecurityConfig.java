@@ -37,6 +37,7 @@ public class SecurityConfig {
                 registry.addMapping("/**")
 
                         .allowedOrigins(
+                                "https://taskflow-front-f1zf.onrender.com",
                                 "https://taskflow-production-6dbe.up.railway.app",
                                 "http://localhost:5173")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
