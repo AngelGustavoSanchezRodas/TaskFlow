@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import TareaFormBody from './TareaFormBody'; 
+import api from '../../api/axiosConfig';
 
 // Componente para crear una nueva tarea
 function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
@@ -39,7 +39,7 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
       };
 
       // 3. Llamada API
-      await axios.post('https://taskflow-production-f5db.up.railway.app/api/tareas/crearTarea', payload);
+      await api.post('/tareas/crearTarea', payload);
       
       alert("¡Tarea asignada exitosamente!");
       setTarea(initialState); // Resetear form

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 import Navbar from './NavbarComponente/Navbar'; 
 import styles from '../styles/Home.module.css'; 
 
@@ -25,7 +25,7 @@ function Home() {
   // Función para cargar los equipos del usuario
   const cargarEquipos = async () => {
     try {
-        const response = await axios.get(`https://taskflow-production-f5db.up.railway.app/api/equipo/mis-equipos/${usuario.idUsuario}`);
+       const response = await api.get(`/equipo/mis-equipos/${usuario.idUsuario}`);
         setEquipos(response.data);
     } catch (error) {
         console.error("Error cargando equipos", error);
