@@ -4,7 +4,8 @@ import styles from "../../styles/Auth.module.css";
 import api from '../../api/axiosConfig';
 
 function RegisterForm() {
-  const [userName, setUserName] = useState(""); // 👈 NUEVO CAMPO
+    // Estados para los campos del formulario
+  const [userName, setUserName] = useState(""); 
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [correo, setCorreo] = useState("");
@@ -14,7 +15,7 @@ function RegisterForm() {
   const handleRegistro = async (e) => {
     e.preventDefault();
     try {
-      //  AHORA ENVIAMOS LOS NOMBRES EXACTOS QUE PIDE TU JAVA
+      // Mapear los nombres de los campos al DTO esperado por Java
       await api.post("/usuarios/registro", {
         userName,
         nombre,

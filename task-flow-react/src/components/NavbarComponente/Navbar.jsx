@@ -90,7 +90,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* 👇 RENDERIZAMOS LOS MODALES AQUÍ MISMO */}
+      {/* RENDERIZAMOS LOS MODALES AQUÍ MISMO */}
       <CrearEquipoModal
         show={showCrear}
         onClose={() => setShowCrear(false)}
@@ -100,7 +100,7 @@ function Navbar() {
       <UnirseEquipoModal
         show={showUnirse}
         onClose={() => setShowUnirse(false)}
-        onSuccess={handleSuccess}
+        onSuccess={handleSuccess} // Para actualizar si se une a uno
       />
     </>
   );

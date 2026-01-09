@@ -70,7 +70,7 @@ function Home() {
                             <div className={`shadow-sm ${styles.teamCard}`} onClick={() => irAlDashboard(equipo.idEquipo)}>
                                 <div className="d-flex justify-content-between align-items-start">
                                     <div className={styles.teamIcon}>
-                                        {/* 👇 2. DATOS CORREGIDOS SEGÚN TU DTO */}
+                                       
                                         {/* Java manda 'nombreEquipo', no 'nombre' */}
                                         {equipo.nombreEquipo ? equipo.nombreEquipo.charAt(0).toUpperCase() : '#'}
                                     </div>
