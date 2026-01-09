@@ -20,23 +20,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(withDefaults()) // <--- ¡ESTO ES VITAL! Activa la configuración de abajo
+            .cors(withDefaults()) //
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // 🔓 Mantenemos tu "puerta abierta" para probar primero
+                .anyRequest().permitAll() // 🔓 Dejamos todo abierto para probar
             );
 
         return http.build();
     }
 
-    // 🔌 EL PUENTE: Configuración de CORS
+    //  EL CONFIGURADOR DE CORS
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        // 👇 ¡IMPORTANTE! Reemplaza esto con TU dominio del Frontend (sin barra al final)
-                        .allowedOrigins("https://taskflow-production-5b4f.up.railway.app")
+
+                        .allowedOrigins("https://taskflow-production-6dbe.up.railway.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -48,5 +48,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
