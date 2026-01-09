@@ -1,14 +1,13 @@
-# 1. OPTIMIZACIÓN: Usamos 'jre-alpine'.
-# 'jre': Solo lo necesario para correr (menos peso).
-# 'alpine': Un Linux miniatura (como de 5MB).
-FROM eclipse-temurin:21-jre-alpine
-
-# 2. DIRECTORIO DE TRABAJO
+# --- ETAPA 1: COCINAR (Build) ---
+# Usamos Maven para crear el .jar aquí mismo
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# 3. COPIA EL JAR
-# (Nota: Esto asume que YA creaste el .jar con Maven en tu compu)
-COPY target/*.jar app.jar
-
-# 4. EJECUCIÓN
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# --- ETAPA 2: SERVIR (Run) ---
+# Usamos Java ligero para correrlo
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
