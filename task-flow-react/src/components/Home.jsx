@@ -25,7 +25,7 @@ function Home() {
   // Función para cargar los equipos del usuario
   const cargarEquipos = async () => {
     try {
-        const response = await axios.get(`https://taskflow-production-b169.up.railway.app/api/equipo/mis-equipos/${usuario.idUsuario}`);
+        const response = await axios.get(`https://taskflow-production-f5db.up.railway.app/api/equipo/mis-equipos/${usuario.idUsuario}`);
         setEquipos(response.data);
     } catch (error) {
         console.error("Error cargando equipos", error);

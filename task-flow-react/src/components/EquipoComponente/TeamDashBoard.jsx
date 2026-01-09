@@ -30,8 +30,8 @@ function TeamDashboard() {
     try {
       setCargando(true);
       const [resMiembros, resTareas] = await Promise.all([
-        axios.get(`https://taskflow-production-b169.up.railway.app/api/equipo/${idEquipo}/miembros`),
-        axios.get(`https://taskflow-production-b169.up.railway.app/api/tareas/listaTareas/${idEquipo}`)
+        axios.get(`https://taskflow-production-f5db.up.railway.app/api/equipo/${idEquipo}/miembros`),
+        axios.get(`https://taskflow-production-f5db.up.railway.app/api/tareas/listaTareas/${idEquipo}`)
       ]);
 
       setMiembros(resMiembros.data);
@@ -65,7 +65,7 @@ function TeamDashboard() {
   const handleCambiarEstado = async (idTarea, estadoActual) => {
     try {
         const nuevoEstado = !estadoActual;
-        await axios.patch(`https://taskflow-production-b169.up.railway.app/api/tareas/${idTarea}/estado?estado=${nuevoEstado}`);
+        await axios.patch(`https://taskflow-production-f5db.up.railway.app/api/tareas/${idTarea}/estado?estado=${nuevoEstado}`);
         
         setTareas(prevTareas => prevTareas.map(t => 
             t.idTarea === idTarea ? { ...t, estado: nuevoEstado } : t
@@ -84,7 +84,7 @@ function TeamDashboard() {
         return;
     }
     try {
-        await axios.delete(`https://taskflow-production-b169.up.railway.app/api/tareas/eliminar/${idTarea}`);
+        await axios.delete(`https://taskflow-production-f5db.up.railway.app/api/tareas/eliminar/${idTarea}`);
         setTareas(prevTareas => prevTareas.filter(t => t.idTarea !== idTarea));
     } catch (error) {
         console.error("Error al eliminar tarea", error);

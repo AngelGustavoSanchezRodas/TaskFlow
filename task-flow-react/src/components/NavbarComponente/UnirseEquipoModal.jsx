@@ -14,7 +14,7 @@ function UnirseEquipoModal({ show, onClose, onSuccess }) {
     try {
       // Llamada a la API para unirse al equipo
       await axios.post(
-        `https://taskflow-production-b169.up.railway.app/api/equipo/unirseAlEquipo?idEquipo=${idEquipoUnirse}&idUsuario=${usuarioObj.idUsuario}`
+        `https://taskflow-production-f5db.up.railway.app/api/equipo/unirseAlEquipo?idEquipo=${idEquipoUnirse}&idUsuario=${usuarioObj.idUsuario}`
       );
       
       alert("¡Te has unido al equipo exitosamente!");
