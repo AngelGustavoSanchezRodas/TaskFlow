@@ -17,6 +17,7 @@ public class TareaController {
     @Autowired
     private TareaService tareaService;
 
+    // CREAR TAREA
     @PostMapping("/crearTarea")
     public ResponseEntity<?> crearTarea(@RequestBody TareaDTO tareaDTO){
         try
@@ -29,6 +30,7 @@ public class TareaController {
         }
     }
 
+    // LISTAR TAREAS POR USUARIO
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<List<TareaDTO>> obtenerTareasPorUsuario(@PathVariable Integer idUsuario) {
 
@@ -37,6 +39,7 @@ public class TareaController {
         return ResponseEntity.ok(tareas);
     }
 
+    // LISTAR TAREAS POR EQUIPO
     @GetMapping("/listaTareas/{idEquipo}")
     public ResponseEntity<?> listarTareaPorEquipo(@PathVariable Integer idEquipo){
         try
@@ -50,6 +53,7 @@ public class TareaController {
         }
     }
 
+    // CAMBIAR ESTADO DE TAREA
    @PatchMapping("/{idTarea}/estado")
     public ResponseEntity<?> cambiarEstadoTarea(@PathVariable Integer idTarea, @RequestParam Boolean estado) {
         try {
@@ -65,6 +69,7 @@ public class TareaController {
         }
     }
 
+    // EDITAR TAREA
     @PutMapping("/editar/{idTarea}")
     public ResponseEntity<?> editarTarea(@PathVariable Integer idTarea, @RequestBody TareaDTO tareaDTO) {
         try {
@@ -75,6 +80,7 @@ public class TareaController {
         }
     }
 
+    // ELIMINAR TAREA
     @DeleteMapping("/eliminar/{idTarea}")
     public ResponseEntity<?> eliminarTareaEquipo(@PathVariable Integer idTarea) {
         try {

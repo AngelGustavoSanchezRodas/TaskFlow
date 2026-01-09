@@ -18,6 +18,7 @@ public class EquipoController {
     @Autowired
     private EquipoService equipoService;
 
+    // CREAR EQUIPO
     @PostMapping("/crearEquipo")
     public ResponseEntity<?> crearEquipo(@RequestBody EquipoDTO equipoDTO, @RequestParam Integer idUsuario) {
         try {
@@ -28,6 +29,7 @@ public class EquipoController {
         }
     }
 
+    // AGREGAR COLABORADOR AL EQUIPO
     @PostMapping("/agregarColaborador")
     public ResponseEntity<?> agregarColaborador(
             @RequestParam Integer idEquipo,
@@ -41,7 +43,7 @@ public class EquipoController {
         }
     }
 
-    // 👇 ESTE ES EL ÚNICO ENDPOINT DE LISTADO QUE NECESITAS AHORA
+    // ESTE ES EL ÚNICO ENDPOINT DE LISTADO QUE NECESITAS AHORA
     @GetMapping("/mis-equipos/{idUsuario}")
     public ResponseEntity<?> obtenerEquiposPorUsuario(@PathVariable Integer idUsuario) {
         try {
@@ -53,6 +55,7 @@ public class EquipoController {
         }
     }
 
+    // UNIRSE AL EQUIPO COMO COLABORADOR
     @PostMapping("/unirseAlEquipo")
     public ResponseEntity<?> unirseAlEquipoComoColaborador (
             @RequestParam Integer idEquipo,
@@ -69,7 +72,7 @@ public class EquipoController {
 
     }
 
-    // GET: /api/equipo/1/miembros
+    // OBTENER MIEMBROS DEL EQUIPO
     @GetMapping("/{idEquipo}/miembros")
     public ResponseEntity<?> obtenerMiembros(@PathVariable Integer idEquipo) {
         try {

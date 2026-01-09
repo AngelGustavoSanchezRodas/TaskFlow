@@ -99,6 +99,7 @@ public class EquipoService {
                 .collect(Collectors.toList());
     }
 
+    // UNIRSE A UN EQUIPO COMO COLABORADOR
     public void unirseAlEquipo (Integer idEquipo, Integer IdUsuario){
 
         // Simplemente reutilizamos el método existente para agregar al usuario como "COLABORADOR"
@@ -106,6 +107,7 @@ public class EquipoService {
 
     }
 
+    // OBTENER MIEMBROS DE UN EQUIPO
     public List<MiembroDTO> obtenerMiembrosDelEquipo(Integer idEquipo) {
         List<UsuarioEquipo> membresias = usuarioEquipoRepository.findByEquipoTrabajo_IdEquipo(idEquipo);
 

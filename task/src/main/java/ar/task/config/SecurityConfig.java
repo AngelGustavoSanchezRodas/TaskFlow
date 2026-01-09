@@ -10,10 +10,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import java.util.Arrays;
+import java.util.List;
+
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -21,13 +20,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    //  EL FILTRO DE SEGURIDAD
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .cors(withDefaults()) //
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // 🔓 Dejamos todo abierto para probar
+                .anyRequest().permitAll() // Dejamos todo abierto para probar
             );
 
         return http.build();
@@ -38,19 +38,14 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // ❌ MAL: Esto es lo que causa tu error:
-        // configuration.setAllowedOrigins(Arrays.asList("*"));
-
-        // ✅ BIEN: Lista explícita de tus dominios amigos:
         configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:5173",                       // Tu Frontend Local
-            "https://taskflow-front-f1zf.onrender.com"     // Tu Frontend en Render
+            "http://localhost:5173",
+            "https://taskflow-front-f1zf.onrender.com"
         ));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
 
-        // Esto es lo que chocaba con el "*":
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -58,6 +53,7 @@ public class SecurityConfig {
         return source;
     }
 
+    // EL ENCRIPTADOR DE CONTRASEÑAS
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+// CONTROLADOR DE USUARIOS
 @RestController // Indica que esta clase recibe peticiones web (JSON)
 @RequestMapping("/api/usuarios") // La dirección base: http://localhost:8080/api/usuarios
 @CrossOrigin(origins = "*") // Permite que tu Frontend (React) se conecte sin bloqueos
@@ -15,6 +16,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    // REGISTRO DE USUARIO
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody UsuarioRegistroDTO usuarioRegistroDTO) {
         try
@@ -30,8 +32,8 @@ public class UsuarioController {
         }
     }
 
-    // POST: Para loguearse (Login Básico)
-    // URL: http://localhost:8080/api/usuarios/login
+
+    // LOGIN DE USUARIO
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioRegistroDTO loginData) {
         try {

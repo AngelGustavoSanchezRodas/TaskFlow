@@ -79,9 +79,7 @@ public class TareaService {
                 .collect(Collectors.toList());
     }
 
-    // Método auxiliar privado para convertir Entidad -> DTO (para no repetir código)
-   // ... dentro de TareaService ...
-
+    // MÉTODO AUXILIAR PARA CONVERTIR ENTIDAD A DTO
     private TareaDTO convertirADTO(Tarea tarea) {
         TareaDTO dto = new TareaDTO();
         dto.setIdTarea(tarea.getIdTarea());
@@ -114,7 +112,7 @@ public class TareaService {
         return dto;
     }
 
-    // CORRECCIÓN: Cambiamos 'TareaDTO' por 'List<TareaDTO>'
+    // LISTAR TAREAS POR USUARIO ASIGNADO
     public List<TareaDTO> obtenerTareasPorUsuario(Integer idUsuario){
 
         // Asegúrate de que este método exista en tu TareaRepository
@@ -125,6 +123,7 @@ public class TareaService {
                 .collect(Collectors.toList());
     }
 
+    // CAMBIAR ESTADO DE TAREA
     // Método para cambiar SOLO el estado (Pendiente/Terminada)
     @Transactional
     public TareaDTO cambiarEstado(Integer idTarea, Boolean nuevoEstado) {
@@ -145,6 +144,7 @@ public class TareaService {
         return convertirADTO(tareaActualizada);
     }
 
+    // EDITAR TAREA
     @Transactional
     public TareaDTO editarTarea(Integer idTarea, TareaDTO tareaDTO){
         // 1. BUSCAR
