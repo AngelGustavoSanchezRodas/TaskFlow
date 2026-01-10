@@ -7,8 +7,9 @@ import UnirseEquipoModal from "./UnirseEquipoModal";
 function Navbar() {
   // Hook de navegación
   const navigate = useNavigate();
-  // Obtener usuario del localStorage
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  // 🛡️ PROTECCIÓN: Busca "user" O "usuario" para evitar errores si cambió el nombre
+  const usuario = JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("usuario"));
 
   // Estados para controlar los modales
   const [showCrear, setShowCrear] = useState(false);
@@ -16,13 +17,13 @@ function Navbar() {
 
   // Función para cerrar sesión
   const handleLogout = () => {
-    localStorage.removeItem("usuario");
+    localStorage.removeItem("user");
+    localStorage.removeItem("usuario"); // Borramos ambas por si acaso
     navigate("/");
   };
 
-  // Función para refrescar la página si crean/unen a un equipo (opcional)
+  // Función para refrescar la página si crean/unen a un equipo
   const handleSuccess = () => {
-    // Si estamos en Home, recargamos para ver el nuevo equipo
     if (window.location.pathname === "/home") {
       window.location.reload();
     }
@@ -47,7 +48,6 @@ function Navbar() {
 
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              {/* Busca esta parte dentro del <ul> y reemplázala */}
               <li className="nav-item">
                 <Link className={`nav-link ${styles.navLink}`} to="/home">
                   <i className="bi bi-grid-fill me-1"></i> Mis Equipos
@@ -74,44 +74,40 @@ function Navbar() {
 
             <div className="d-flex align-items-center">
               {usuario && (
-                <span className="text-secondary me-3 small d-none d-md-block fw-bold">
-                  Hola, {usuario.nombre}
-                </span>
-              )}
-              <div className="d-flex align-items-center gap-3">
-                {/* Enlace al Perfil */}
-                <Link
-                  to="/perfil"
-                  className="text-decoration-none text-light fw-bold"
-                >
-                  <i className="bi bi-person-circle me-1"></i>
-                  Hola, {usuario ? usuario.nombre : "Usuario"}
-                </Link>
+                <div className="d-flex align-items-center gap-3">
+                  {/* Enlace al Perfil */}
+                  <Link
+                    to="/perfil"
+                    className="text-decoration-none text-light fw-bold"
+                  >
+                    <i className="bi bi-person-circle me-1"></i>
+                    Hola, {usuario.nombre || "Usuario"}
+                  </Link>
 
-                {/* Botón Cerrar Sesión (que ya tenías) */}
-                <button
-                  className="btn btn-outline-danger btn-sm"
-                  onClick={handleLogout}
-                >
-                  Cerrar Sesión
-                </button>
-              </div>
+                  {/* Botón Cerrar Sesión */}
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={handleLogout}
+                  >
+                    Cerrar Sesión
+                  </button>
+                </div> 
+              )} 
             </div>
           </div>
         </div>
       </nav>
 
-      {/* RENDERIZAMOS LOS MODALES AQUÍ MISMO */}
       <CrearEquipoModal
         show={showCrear}
         onClose={() => setShowCrear(false)}
-        onSuccess={handleSuccess} // Para actualizar si se crea uno
+        onSuccess={handleSuccess}
       />
 
       <UnirseEquipoModal
         show={showUnirse}
         onClose={() => setShowUnirse(false)}
-        onSuccess={handleSuccess} // Para actualizar si se une a uno
+        onSuccess={handleSuccess}
       />
     </>
   );
