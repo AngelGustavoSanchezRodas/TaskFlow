@@ -13,7 +13,7 @@ function TeamDashboard() {
   const navigate = useNavigate();
   
   // Obtener usuario del localStorage (Unificado a "user")
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("usuario"));
 
   const [miembros, setMiembros] = useState([]);
   const [tareas, setTareas] = useState([]);
@@ -61,11 +61,16 @@ function TeamDashboard() {
 
   // Función para salir del equipo
   const handleSalirEquipo = async () => {
+    if (!user || !user.idUsuario) {
+        alert("Error de sesión: Por favor cierra sesión y vuelve a ingresar.");
+        return;
+    }
+
     if (window.confirm("¿Estás seguro que deseas salir de este equipo?")) {
       try {
         await salirDelEquipo(idEquipo, user.idUsuario);
         alert("Has salido del equipo.");
-        navigate("/home"); // 👈 Corregido a /home (o /dashboard si esa es tu ruta principal)
+        navigate("/home"); 
       } catch (error) {
         console.error(error);
         alert("Hubo un error al intentar salir.");
