@@ -83,4 +83,15 @@ public class EquipoController {
         }
     }
 
+    @DeleteMapping("/{idEquipo}/salir/{idUsuario}")
+    public ResponseEntity<?> salirDelEquipo(@PathVariable Integer idEquipo, @PathVariable Integer idUsuario) {
+        try {
+            equipoService.salirDelEquipo(idEquipo, idUsuario);
+            return ResponseEntity.ok("Has salido del equipo exitosamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 }

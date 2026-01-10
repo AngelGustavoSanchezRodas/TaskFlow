@@ -133,4 +133,16 @@ public class EquipoService {
                 .collect(Collectors.toList());
     }
 
+    // SALIR DEL EQUIPO
+   @Transactional
+    public void salirDelEquipo(Integer idEquipo, Integer idUsuario) {
+        // 1. Buscamos la "ficha de inscripción" (la relación en la tabla intermedia)
+        UsuarioEquipo relacion = usuarioEquipoRepository
+                .findByEquipoTrabajo_IdEquipoAndUsuario_IdUsuario(idEquipo, idUsuario)
+                .orElseThrow(() -> new RuntimeException("El usuario no pertenece a este equipo o el equipo no existe."));
+
+        // 2. La borramos directamente
+        usuarioEquipoRepository.delete(relacion);
+    }
+
 }

@@ -18,4 +18,7 @@ public interface UsuarioEquipoRepository extends JpaRepository<UsuarioEquipo, In
 
     // Verificar si un usuario ya pertenece a un equipo específico (para no agregarlo doble)
     Optional<UsuarioEquipo> findByUsuario_IdUsuarioAndEquipoTrabajo_IdEquipo(Integer idUsuario, Integer idEquipo);
+
+    Optional<UsuarioEquipo> findByEquipoTrabajo_IdEquipoAndUsuario_IdUsuario(Integer idEquipo, Integer idUsuario);
+
 }
