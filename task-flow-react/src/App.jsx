@@ -17,6 +17,7 @@ function App() {
         
         <Route path="/equipo/:idEquipo" element={<TeamDashboard />} />
 
+        <Route path="/perfil" element={<EditarPerfil />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
