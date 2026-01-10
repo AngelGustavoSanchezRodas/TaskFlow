@@ -6,8 +6,7 @@ import TareasList from "./TareasList";
 import CrearTareaModal from "./CrearTarea";
 import styles from "../../styles/TeamDashboard.module.css";
 import api from "../../api/axiosConfig";
-// 👇 AJUSTA ESTA RUTA según tu nombre de archivo (TeamService o TeamServie)
-import { salirDelEquipo } from "../../service/TeamServie"; 
+import { salirDelEquipo } from "../../service/TeamService"; 
 
 function TeamDashboard() {
   const { idEquipo } = useParams();
