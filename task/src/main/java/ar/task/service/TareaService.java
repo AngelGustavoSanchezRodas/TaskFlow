@@ -101,9 +101,6 @@ public class TareaService {
                 String nombre = tarea.getUsuarioAsignado().getDatosUsuario().getNombre();
                 String apellido = tarea.getUsuarioAsignado().getDatosUsuario().getApellido();
                 dto.setNombreResponsable(nombre + " " + apellido);
-            } else {
-                // Si por alguna razón no tiene datos personales, usamos el username
-                dto.setNombreResponsable(tarea.getUsuarioAsignado().getUserName());
             }
         } else {
             dto.setNombreResponsable("Sin Asignar");
