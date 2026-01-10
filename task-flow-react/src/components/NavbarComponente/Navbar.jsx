@@ -46,7 +46,6 @@ function Navbar() {
           </button>
 
           <div className="collapse navbar-collapse" id="navbarNav">
-
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {/* Busca esta parte dentro del <ul> y reemplázala */}
               <li className="nav-item">
@@ -79,12 +78,24 @@ function Navbar() {
                   Hola, {usuario.nombre}
                 </span>
               )}
-              <button
-                className={`btn btn-sm rounded-pill px-3 ${styles.btnLogout}`}
-                onClick={handleLogout}
-              >
-                Cerrar Sesión
-              </button>
+              <div className="d-flex align-items-center gap-3">
+                {/* Enlace al Perfil */}
+                <Link
+                  to="/perfil"
+                  className="text-decoration-none text-light fw-bold"
+                >
+                  <i className="bi bi-person-circle me-1"></i>
+                  Hola, {usuario ? usuario.nombre : "Usuario"}
+                </Link>
+
+                {/* Botón Cerrar Sesión (que ya tenías) */}
+                <button
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={handleLogout}
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
             </div>
           </div>
         </div>
