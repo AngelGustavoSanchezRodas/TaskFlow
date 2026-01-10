@@ -4,6 +4,7 @@ import RegisterForm from './components/Log-Register/RegisterForm';
 import Home from './components/Home'; 
 import TeamDashboard from './components/EquipoComponente/TeamDashBoard';
 import NotFound from './components/NotFound';
+import EditarPerfil from './components/Log-Register/EditarPerfil';
 
 function App() {
   return (
