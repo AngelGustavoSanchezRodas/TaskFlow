@@ -86,4 +86,29 @@ public class UsuarioService {
 
         return dto;
     }
+
+    @Transactional
+    public UsuarioSalidaDTO editarPerfil(Integer idUsuario, String nombre, String apellido, String correo) {
+        // Buscamos al usuario
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Actualizamos los datos (que viven en DatosUsuario)
+        usuario.getDatosUsuario().setNombre(nombre);
+        usuario.getDatosUsuario().setApellido(apellido);
+        usuario.getDatosUsuario().setCorreo(correo);
+
+        // Guardamos (el Cascade actualiza DatosUsuario automáticamente)
+        usuarioRepository.save(usuario);
+
+        // Devolvemos los datos actualizados para que el Front se actualice al instante
+        UsuarioSalidaDTO dto = new UsuarioSalidaDTO();
+        dto.setIdUsuario(usuario.getIdUsuario());
+        dto.setIdDatosUsuario(usuario.getDatosUsuario().getIdDatosUsuario());
+        dto.setNombre(usuario.getDatosUsuario().getNombre());
+        dto.setApellido(usuario.getDatosUsuario().getApellido());
+        dto.setCorreo(usuario.getDatosUsuario().getCorreo());
+
+        return dto;
+    }
 }

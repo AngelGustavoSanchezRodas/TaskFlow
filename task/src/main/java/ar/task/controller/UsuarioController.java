@@ -44,4 +44,21 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // EDITAR PERFIL DE USUARIO
+    @PutMapping("/editar/{idUsuario}")
+    public ResponseEntity<?> editarPerfil(@PathVariable Integer idUsuario, @RequestBody UsuarioRegistroDTO request) {
+        try {
+            // Reutilizo UsuarioRegistroDTO porque ya tiene nombre, apellido y correo.
+            UsuarioSalidaDTO usuarioActualizado = usuarioService.editarPerfil(
+                idUsuario,
+                request.getNombre(),
+                request.getApellido(),
+                request.getCorreo()
+            );
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
