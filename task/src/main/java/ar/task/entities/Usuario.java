@@ -13,9 +13,6 @@ public class Usuario {
     @Column(name = "idusuario")
     private Integer idUsuario;
 
-    @Column(name = "username")
-    private String userName;
-
     // Relación Uno a Uno con DatosUsuario
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "iddatosusuario", referencedColumnName = "iddatosusuario")

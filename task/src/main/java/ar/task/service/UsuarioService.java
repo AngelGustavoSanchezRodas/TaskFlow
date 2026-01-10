@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UsuarioService {
 
-    // 2. Inyección de Dependencias: Traemos el repositorio para poder guardar
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -22,49 +21,39 @@ public class UsuarioService {
     private DatosUsuarioRepository datosUsuarioRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Inyección de la herramienta
+    private PasswordEncoder passwordEncoder;
 
     // Método principal para registrar
-    @Transactional // 3. Si algo falla en medio del proceso, hace "rollback" (deshace todo)
+    @Transactional
     public UsuarioSalidaDTO registrarUsuario(UsuarioRegistroDTO usuarioDTO) {
 
-    // Verificamos si el CORREO ya existe
-    if (datosUsuarioRepository.findByCorreo(usuarioDTO.getCorreo()).isPresent()) {
-        throw new RuntimeException("Error: El correo " + usuarioDTO.getCorreo() + " ya está registrado.");
-    }
+        // 1. Verificamos si el CORREO ya existe
+        if (datosUsuarioRepository.findByCorreo(usuarioDTO.getCorreo()).isPresent()) {
+            throw new RuntimeException("Error: El correo " + usuarioDTO.getCorreo() + " ya está registrado.");
+        }
 
-    // Verificamos si el USERNAME ya existe
-    if (usuarioRepository.findByUserName(usuarioDTO.getUserName()).isPresent()) {
-        throw new RuntimeException("Error: El usuario " + usuarioDTO.getUserName() + " ya está ocupado.");
-    }
-
-        // B. CONVERSIÓN (DTO -> Entidades)
-        //  Crear y llenar DatosUsuario
+        // 2. CONVERSIÓN (DTO -> Entidades)
         DatosUsuario datos = new DatosUsuario();
         datos.setNombre(usuarioDTO.getNombre());
         datos.setApellido(usuarioDTO.getApellido());
         datos.setCorreo(usuarioDTO.getCorreo());
         datos.setActivo(true);
-
-        //   Encriptamos
         datos.setContrasenia(passwordEncoder.encode(usuarioDTO.getContrasenia()));
 
-        //Crear y llenar Usuario
         Usuario usuario = new Usuario();
-        usuario.setUserName(usuarioDTO.getUserName());
+        // (Eliminada la línea usuario.setUserName)
 
-        //  Relacionarlos
-        usuario.setDatosUsuario(datos); // Al meter 'datos' dentro de 'usuario'...
+        // Relacionarlos
+        usuario.setDatosUsuario(datos);
 
-        // GUARDADO (Llamar al repositorio)
-        // Gracias al CASCADE.ALL, al guardar 'usuario', se guarda 'datos' automáticamente
+        // 3. GUARDADO
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
 
-        // RESPUESTA (Entidad -> DTO Salida)
-        // Convertimos el resultado final a un DTO seguro (sin contraseña)
+        // 4. RESPUESTA
         UsuarioSalidaDTO respuesta = new UsuarioSalidaDTO();
         respuesta.setIdUsuario(usuarioGuardado.getIdUsuario());
-        respuesta.setUserName(usuarioGuardado.getUserName());
+        // (Eliminada la respuesta de userName)
+
         respuesta.setNombre(usuarioGuardado.getDatosUsuario().getNombre());
         respuesta.setApellido(usuarioGuardado.getDatosUsuario().getApellido());
         respuesta.setCorreo(usuarioGuardado.getDatosUsuario().getCorreo());
@@ -73,25 +62,23 @@ public class UsuarioService {
         return respuesta;
     }
 
- public UsuarioSalidaDTO login(String correo, String contrasenia) {
+    public UsuarioSalidaDTO login(String correo, String contrasenia) {
 
-        //  Buscamos al USUARIO COMPLETO (Padre) usando el correo
+        // Buscamos al USUARIO usando el correo
         Usuario usuario = usuarioRepository.findByDatosUsuario_Correo(correo)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        //  Validamos contraseña (sacándola de los datos del usuario)
+        // Validamos contraseña
         if (!passwordEncoder.matches(contrasenia, usuario.getDatosUsuario().getContrasenia())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
-        //  Llenamos el DTO con TODO
+        // Llenamos el DTO
         UsuarioSalidaDTO dto = new UsuarioSalidaDTO();
 
-        // Datos del Padre
         dto.setIdUsuario(usuario.getIdUsuario());
-        dto.setUserName(usuario.getUserName());
+        // (Eliminado dto.setUserName)
 
-        // Datos del Hijo
         dto.setIdDatosUsuario(usuario.getDatosUsuario().getIdDatosUsuario());
         dto.setNombre(usuario.getDatosUsuario().getNombre());
         dto.setApellido(usuario.getDatosUsuario().getApellido());

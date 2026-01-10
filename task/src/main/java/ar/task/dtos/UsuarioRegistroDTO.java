@@ -6,9 +6,6 @@ import lombok.Data;
 @Data
 public class UsuarioRegistroDTO {
 
-    // Datos de login (Tabla Usuario)
-    private String userName;
-
     // Datos personales (Tabla DatosUsuario)
     private String nombre;
     private String apellido;
