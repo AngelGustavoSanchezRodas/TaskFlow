@@ -17,7 +17,6 @@ function RegisterForm() {
     try {
       // Mapear los nombres de los campos al DTO esperado por Java
       await api.post("/usuarios/registro", {
-        userName,
         nombre,
         apellido,
         correo,
@@ -39,20 +38,6 @@ function RegisterForm() {
         <h2 className={styles.authTitle}>Crear Cuenta</h2>
 
         <form onSubmit={handleRegistro}>
-          <div className="mb-3">
-            <label className="form-label text-muted small fw-bold">
-              Usuario (Nick)
-            </label>
-            <input
-              type="text"
-              className={`form-control ${styles.inputField}`}
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              placeholder="ej: juanperez99"
-              required
-            />
-          </div>
-
           <div className="row">
             <div className="col-md-6 mb-3">
               <label className="form-label text-muted small fw-bold">

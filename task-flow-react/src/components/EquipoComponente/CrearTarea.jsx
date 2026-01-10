@@ -10,7 +10,6 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
   const initialState = {
     titulo: "",
     descripcion: "",
-    fechaFin: "",
     prioridad: false,
     idUsuarioAsignado: ""
   };
@@ -32,7 +31,6 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
         descripcion: tarea.descripcion,
         prioridad: tarea.prioridad,
         categoria: "General",
-        fechaFin: new Date(tarea.fechaFin).toISOString(),
         idEquipo: idEquipo,
         idUsuarioCreador: usuarioLogueado.idUsuario,
         idUsuarioAsignado: parseInt(tarea.idUsuarioAsignado)

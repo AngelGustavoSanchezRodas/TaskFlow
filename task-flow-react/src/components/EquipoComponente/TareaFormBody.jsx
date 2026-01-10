@@ -31,16 +31,6 @@ function TareaFormBody({ tarea, setTarea, miembros }) {
       </div>
 
       <div className="row">
-        {/* Fecha Límite */}
-        <div className="col-md-6 mb-3">
-          <label className="form-label fw-bold">Fecha Límite</label>
-          <input 
-            type="date" className="form-control"
-            value={tarea.fechaFin}
-            onChange={(e) => handleChange("fechaFin", e.target.value)}
-          />
-        </div>
-
         {/* Prioridad */}
         <div className="col-md-6 mb-3 d-flex align-items-end">
           <div className="form-check form-switch mb-2">

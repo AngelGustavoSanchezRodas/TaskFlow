@@ -1,17 +1,21 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // 👈 FALTABA useNavigate
 import { useEffect, useState } from "react";
 import Navbar from "../NavbarComponente/Navbar";
 import MiembrosList from "./MiembrosList";
 import TareasList from "./TareasList";
 import CrearTareaModal from "./CrearTarea";
 import styles from "../../styles/TeamDashboard.module.css";
-import api from '../../api/axiosConfig';
+import api from "../../api/axiosConfig";
+// 👇 AJUSTA ESTA RUTA según tu nombre de archivo (TeamService o TeamServie)
+import { salirDelEquipo } from "../../service/TeamServie"; 
 
 function TeamDashboard() {
-  // Obtener el ID del equipo desde los parámetros de la URL
   const { idEquipo } = useParams();
+  const navigate = useNavigate();
+  
+  // Obtener usuario del localStorage (Unificado a "user")
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  // Estados para miembros, tareas, carga, modal y rol
   const [miembros, setMiembros] = useState([]);
   const [tareas, setTareas] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -19,12 +23,10 @@ function TeamDashboard() {
   const [soyLider, setSoyLider] = useState(false);
   const [miId, setMiId] = useState(null);
 
-  // Cargar datos al montar el componente o cambiar idEquipo
   useEffect(() => {
     cargarDatos();
   }, [idEquipo]);
 
-  // Función para cargar miembros y tareas
   const cargarDatos = async () => {
     try {
       setCargando(true);
@@ -36,14 +38,11 @@ function TeamDashboard() {
       setMiembros(resMiembros.data);
       setTareas(resTareas.data);
 
-      const usuarioLogueado = JSON.parse(localStorage.getItem("usuario"));
-
-      // OBTENER MI ID Y VERIFICAR SI SOY LIDER
-      if (usuarioLogueado) {
-        const idActual = Number(usuarioLogueado.idUsuario);
+      // Verificar si el usuario actual es líder
+      if (user) {
+        const idActual = Number(user.idUsuario);
         setMiId(idActual);
 
-        // VERIFICAR ROL
         const yo = resMiembros.data.find(
           (m) => Number(m.idUsuario) === idActual
         );
@@ -61,7 +60,20 @@ function TeamDashboard() {
     }
   };
 
-  // Manejar cambio de estado de tarea
+  // Función para salir del equipo
+  const handleSalirEquipo = async () => {
+    if (window.confirm("¿Estás seguro que deseas salir de este equipo?")) {
+      try {
+        await salirDelEquipo(idEquipo, user.idUsuario);
+        alert("Has salido del equipo.");
+        navigate("/home"); // 👈 Corregido a /home (o /dashboard si esa es tu ruta principal)
+      } catch (error) {
+        console.error(error);
+        alert("Hubo un error al intentar salir.");
+      }
+    }
+  };
+
   const handleCambiarEstado = async (idTarea, estadoActual) => {
     try {
       const nuevoEstado = !estadoActual;
@@ -79,7 +91,6 @@ function TeamDashboard() {
     }
   };
 
-  // Manejar eliminación de tarea
   const handleEliminar = async (idTarea) => {
     if (
       !window.confirm(
@@ -105,28 +116,36 @@ function TeamDashboard() {
 
       <div className="row mt-5">
         <div className="col-12 mb-4">
-          {/*  CABECERA ESTILIZADA CON CSS MODULES (SIN BARRA DE PROGRESO) */}
           <div className={`card shadow-lg ${styles.dashboardHeader}`}>
             <div className="card-body d-flex justify-content-between align-items-center">
               <div>
                 <h2 className="fw-bold mb-0 text-white">
-                  <i className="bi bi-rocket-takeoff-fill me-2"></i> Panel de
-                  Equipo
+                  <i className="bi bi-rocket-takeoff-fill me-2"></i> Panel de Equipo
                 </h2>
                 <small className={styles.dashboardSubtitle}>
                   ID de Equipo: {idEquipo}
                 </small>
               </div>
-              <div>
-                {soyLider && (
+              
+              <div className="d-flex gap-2"> {/* Agrupé botones para mejor orden */}
                   <button
-                    className="btn btn-light text-primary fw-bold shadow"
-                    onClick={() => setShowModalTarea(true)}
+                    className="btn btn-outline-danger"
+                    onClick={handleSalirEquipo}
                   >
-                    <i className="bi bi-plus-lg"></i> Asignar Tarea
+                    <i className="bi bi-box-arrow-right me-2"></i>
+                    Salir
                   </button>
-                )}
+
+                  {soyLider && (
+                    <button
+                      className="btn btn-light text-primary fw-bold shadow"
+                      onClick={() => setShowModalTarea(true)}
+                    >
+                      <i className="bi bi-plus-lg"></i> Asignar Tarea
+                    </button>
+                  )}
               </div>
+
             </div>
           </div>
         </div>
