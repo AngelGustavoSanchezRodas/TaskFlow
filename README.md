@@ -60,9 +60,9 @@ TaskFlow es una aplicación web colaborativa que permite a los equipos organizar
 |:---:|:---:|
 | <img src="https://github.com/user-attachments/assets/c12c92b8-f293-4ab7-b308-22a783154478" width="400" /> | <img src="https://github.com/user-attachments/assets/f724bc7e-f811-49cb-8c9a-0fb760274790" width="400" /> |
 
-| Creación de Equipos | Perfil de Usuario |
+| Creación de Equipos | 
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/637bfaad-af0f-4a04-8ddd-b6326d0db4c8" width="400" /> | *Aquí puedes poner una foto de tu nueva vista de perfil* |
+| <img src="https://github.com/user-attachments/assets/637bfaad-af0f-4a04-8ddd-b6326d0db4c8" width="400" /> |
 
 ---
 
