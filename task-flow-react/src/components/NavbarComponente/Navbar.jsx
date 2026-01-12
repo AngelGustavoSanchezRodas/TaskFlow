@@ -8,7 +8,7 @@ function Navbar() {
   // Hook de navegación
   const navigate = useNavigate();
 
-  // 🛡️ PROTECCIÓN: Busca "user" O "usuario" para evitar errores si cambió el nombre
+  // PROTECCIÓN: Busca "user" O "usuario" para evitar errores si cambió el nombre
   const usuario = JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("usuario"));
 
   // Estados para controlar los modales

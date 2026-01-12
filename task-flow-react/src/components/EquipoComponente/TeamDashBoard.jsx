@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom"; // 👈 FALTABA useNavigate
+import { useParams, useNavigate } from "react-router-dom"; 
 import { useEffect, useState } from "react";
 import Navbar from "../NavbarComponente/Navbar";
 import MiembrosList from "./MiembrosList";
@@ -7,6 +7,7 @@ import CrearTareaModal from "./CrearTarea";
 import styles from "../../styles/TeamDashboard.module.css";
 import api from "../../api/axiosConfig";
 import { salirDelEquipo } from "../../service/TeamService"; 
+import Swal from 'sweetalert2';
 
 function TeamDashboard() {
   const { idEquipo } = useParams();
@@ -60,20 +61,65 @@ function TeamDashboard() {
   };
 
   // Función para salir del equipo
-  const handleSalirEquipo = async () => {
+ const handleSalirEquipo = async () => {
+    // Protección de sesión
     if (!user || !user.idUsuario) {
-        alert("Error de sesión: Por favor cierra sesión y vuelve a ingresar.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Sesión no válida',
+            text: 'Por favor, cierra sesión y vuelve a ingresar.',
+        });
         return;
     }
 
-    if (window.confirm("¿Estás seguro que deseas salir de este equipo?")) {
+    // 1. Mostrar la Alerta de Confirmación (Pregunta)
+    const result = await Swal.fire({
+        title: '¿Abandonar el equipo?',
+        text: "Ya no tendrás acceso a las tareas y el chat.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33', // Rojo para confirmar
+        cancelButtonColor: '#3085d6', // Azul para cancelar
+        confirmButtonText: 'Sí, salir',
+        cancelButtonText: 'Cancelar'
+    });
+
+    // 2. Si el usuario confirma (hace clic en "Sí, salir")
+    if (result.isConfirmed) {
       try {
+        // Mostrar indicador de carga mientras el backend procesa
+        Swal.fire({
+            title: 'Saliendo...',
+            text: 'Procesando tu solicitud',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Llamada a la API
         await salirDelEquipo(idEquipo, user.idUsuario);
-        alert("Has salido del equipo.");
-        navigate("/home"); 
+
+        // 3. Alerta de Éxito
+        await Swal.fire({
+            title: '¡Listo!',
+            text: 'Has salido del equipo correctamente.',
+            icon: 'success',
+            timer: 2000, // Se cierra sola en 2 segundos
+            showConfirmButton: false
+        });
+
+        // Redirección
+        navigate("/home");
+
       } catch (error) {
         console.error(error);
-        alert("Hubo un error al intentar salir.");
+        // Alerta de Error
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Hubo un error al intentar salir del equipo.',
+        });
       }
     }
   };
