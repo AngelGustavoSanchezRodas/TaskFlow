@@ -17,6 +17,7 @@ function TareaFormBody({ tarea, setTarea, miembros }) {
           type="text" className="form-control" 
           value={tarea.titulo}
           onChange={(e) => handleChange("titulo", e.target.value)}
+          placeholder="Ej: Revisar documentación..."
         />
       </div>
 
@@ -31,7 +32,18 @@ function TareaFormBody({ tarea, setTarea, miembros }) {
       </div>
 
       <div className="row">
-        {/* Prioridad */}
+        {/* Columna 1: Fecha Límite (AGREGADO) */}
+        <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Fecha Límite</label>
+            <input 
+              type="date" 
+              className="form-control"
+              value={tarea.fechaFin}
+              onChange={(e) => handleChange("fechaFin", e.target.value)}
+            />
+        </div>
+
+        {/* Columna 2: Prioridad */}
         <div className="col-md-6 mb-3 d-flex align-items-end">
           <div className="form-check form-switch mb-2">
             <input 
@@ -39,7 +51,7 @@ function TareaFormBody({ tarea, setTarea, miembros }) {
               checked={tarea.prioridad}
               onChange={(e) => handleChange("prioridad", e.target.checked)}
             />
-            <label className="form-check-label text-danger fw-bold" htmlFor="prioridadSwitch">
+            <label className="form-check-label text-danger fw-bold ms-2" htmlFor="prioridadSwitch">
               ¡Es Urgente!
             </label>
           </div>
@@ -57,7 +69,8 @@ function TareaFormBody({ tarea, setTarea, miembros }) {
           <option value="">Selecciona un miembro...</option>
           {miembros.map(m => (
             <option key={m.idUsuario} value={m.idUsuario}>
-              {m.nombre} {m.apellido} ({m.rol})
+              {/* Ajustamos esto para asegurar que muestre el nombre correctamente */}
+              {m.datosUsuario?.nombre} {m.datosUsuario?.apellido} ({m.rol})
             </option>
           ))}
         </select>
