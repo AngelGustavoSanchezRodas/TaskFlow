@@ -2,30 +2,27 @@ import React, { useState } from 'react';
 import TareaFormBody from './TareaFormBody'; 
 import api from '../../api/axiosConfig';
 
-// Componente para crear una nueva tarea
 function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
-  const usuarioLogueado = JSON.parse(localStorage.getItem('usuario'));
+  const usuarioLogueado = JSON.parse(localStorage.getItem('usuario')) || {};
 
-  // Estado inicial
   const initialState = {
     titulo: "",
     descripcion: "",
     prioridad: false,
-    idUsuarioAsignado: ""
+    idUsuarioAsignado: "",
+    fechaFin: "" // 1. Inicializamos la fecha vacía
   };
 
-  // Estado local de la tarea
   const [tarea, setTarea] = useState(initialState);
 
   const handleCrear = async () => {
-    // 1. Validaciones
+    // 2. VALIDACIÓN: Ahora sí obligamos a que haya fecha
     if (!tarea.titulo || !tarea.idUsuarioAsignado || !tarea.fechaFin) {
-      alert("Por favor completa título, fecha y asigna un responsable.");
+      alert("Por favor completa título, asigna un responsable y una fecha de entrega.");
       return;
     }
 
     try {
-      // 2. Preparar Payload
       const payload = {
         titulo: tarea.titulo,
         descripcion: tarea.descripcion,
@@ -33,19 +30,21 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
         categoria: "General",
         idEquipo: idEquipo,
         idUsuarioCreador: usuarioLogueado.idUsuario,
-        idUsuarioAsignado: parseInt(tarea.idUsuarioAsignado)
+        idUsuarioAsignado: parseInt(tarea.idUsuarioAsignado),
+        
+        // 3. ENVÍO: Mandamos la fecha que elegiste en el calendario
+        fechaFin: tarea.fechaFin 
       };
 
-      // 3. Llamada API
-      await api.post('/tareas/crearTarea', payload);
+      await api.post('/tarea/crear', payload);
       
       alert("¡Tarea asignada exitosamente!");
-      setTarea(initialState); // Resetear form
+      setTarea(initialState);
       onSuccess(); 
       onClose();
 
     } catch (error) {
-      console.error("Error al crear tarea", error);
+      console.error("Error al crear tarea:", error);
       alert("Error al asignar la tarea.");
     }
   };
@@ -60,16 +59,13 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
             <h5 className="modal-title">Asignar Nueva Tarea</h5>
             <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
           </div>
-          
           <div className="modal-body">
-            {/*  Aquí inyectamos el formulario visual */}
             <TareaFormBody 
                 tarea={tarea} 
                 setTarea={setTarea} 
                 miembros={miembros} 
             />
           </div>
-
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
             <button type="button" className="btn btn-primary" onClick={handleCrear}>Asignar Tarea</button>
