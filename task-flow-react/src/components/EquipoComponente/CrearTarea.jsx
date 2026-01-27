@@ -36,7 +36,7 @@ function CrearTarea({ show, onClose, onSuccess, idEquipo, miembros }) {
         fechaFin: tarea.fechaFin 
       };
 
-      await api.post('/tareas/crear', payload);
+      await api.post('/tareas/crearTarea', payload);
     
       alert("¡Tarea asignada exitosamente!");
       setTarea(initialState);
